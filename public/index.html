@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#172d3d">
+  <meta name="description" content="Discover useful finds from the CS community. Buy and sell with CS MARCHE.">
+  <title>CS MARCHE — The campus marketplace</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="/js/app.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="wordmark" href="/" aria-label="CS MARCHE home">CS <span>MARCHE</span><i>.</i></a>
+    <nav class="main-nav" aria-label="Main navigation">
+      <a class="nav-link active" href="#discover">Discover</a>
+      <a class="nav-link" href="#about">About</a>
+    </nav>
+    <div class="header-actions">
+      <a class="text-link" href="#login" data-auth-link="login">Log in</a>
+      <a class="button button-dark button-small" href="#register" data-auth-link="register">Join the market <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="about">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-line"></span> THE CS COMMUNITY MARKETPLACE</p>
+        <h1>Good finds.<br><em>Great connections.</em></h1>
+        <p class="hero-description">A considered corner of campus life. Discover what your community is sharing, or pass something useful on.</p>
+        <div class="hero-actions">
+          <a class="button button-dark" href="#discover">Explore the marketplace <span aria-hidden="true">↗</span></a>
+          <a class="subtle-link" href="#register">Have something to sell? <span aria-hidden="true">→</span></a>
+        </div>
+        <div class="hero-note"><span class="note-mark">✳</span><span>Made for the community, by the community.</span></div>
+      </div>
+      <div class="hero-art" aria-label="Warm editorial still life">
+        <div class="art-frame">
+          <div class="art-sun"></div>
+          <div class="art-arch"></div>
+          <div class="art-book book-back"></div>
+          <div class="art-book book-front"><span>IDEAS<br>IN GOOD<br>COMPANY.</span></div>
+          <div class="art-stone"></div>
+          <span class="art-caption">OBJECTS WITH A SECOND STORY</span>
+        </div>
+        <span class="art-index">01 / COMMUNITY</span>
+      </div>
+      <div class="hero-bottom"><span>BUY · SELL · CONNECT</span><span>EST. FOR CS STUDENTS</span></div>
+    </section>
+
+    <section class="market-section" id="discover">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow"><span class="eyebrow-line"></span> THE COMMUNITY EDIT</p>
+          <h2>Find your <em>next thing.</em></h2>
+        </div>
+        <p class="section-intro">From everyday essentials to unexpected gems — see what's finding a new home.</p>
+      </div>
+      <div class="market-toolbar">
+        <span class="results-label">LATEST LISTINGS</span>
+        <span class="results-count" id="results-count">A MARKETPLACE IN THE MAKING</span>
+      </div>
+      <div class="empty-state" id="products-grid">
+        <span class="empty-icon" aria-hidden="true">✳</span>
+        <h3>Something good is taking shape.</h3>
+        <p>New finds from the CS community will appear here. Be one of the first to list something.</p>
+        <a class="button button-outline" href="#register">Create your account <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="wordmark footer-wordmark" href="/">CS <span>MARCHE</span><i>.</i></a>
+    <p>A little marketplace. A lot of community.</p>
+    <span>© <span id="year"></span> CS MARCHE</span>
+  </footer>
+</body>
+</html>
