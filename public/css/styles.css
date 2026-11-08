@@ -216,3 +216,52 @@ h1 em, h2 em { color: var(--olive); font-weight: 500; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+
+/* Modern motion and visual polish */
+:root{--font-body:"Manrope",sans-serif;--font-display:"Space Grotesk",sans-serif}
+body{background:radial-gradient(ellipse at 85% 12%,rgba(182,139,87,.12),transparent 30%),var(--ivory);overflow-x:hidden}
+.site-header{position:sticky;top:0;z-index:20;background:rgba(244,239,230,.86);backdrop-filter:blur(18px);animation:headerDrop .8s ease both}
+.wordmark{font-weight:800;animation:logoGlow 3s ease-in-out infinite;transition:transform .3s,text-shadow .3s}
+.wordmark:hover{transform:translateY(-2px);text-shadow:0 0 16px rgba(182,139,87,.5)}
+.wordmark i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--bronze);box-shadow:0 0 7px var(--bronze);animation:logoBlink 1.6s ease-in-out infinite}
+.nav-link,.text-link{position:relative}
+.nav-link:after,.text-link:after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:1px;background:var(--bronze);transform:scaleX(0);transform-origin:right;transition:transform .3s}
+.nav-link:hover:after,.text-link:hover:after,.nav-link.active:after{transform:scaleX(1);transform-origin:left}
+.button{position:relative;overflow:hidden;transition:transform .3s cubic-bezier(.2,.75,.25,1),box-shadow .3s,background .3s}
+.button:before{content:"";position:absolute;inset:0;background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,.22) 50%,transparent 75%);transform:translateX(-120%);transition:transform .65s}
+.button:hover:before{transform:translateX(120%)}
+.button:hover{transform:translateY(-4px);box-shadow:0 12px 28px rgba(23,45,61,.18)}
+.hero-copy{animation:riseIn .9s .1s both}
+.hero-art{animation:artIn 1s .2s both}
+.art-frame{box-shadow:0 25px 65px rgba(81,67,55,.15);transform:perspective(900px) rotateY(-4deg);transition:transform .6s,box-shadow .6s}
+.art-frame:hover{transform:perspective(900px) rotateY(0) translateY(-7px);box-shadow:0 35px 75px rgba(81,67,55,.22)}
+.art-frame:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,transparent 30%,rgba(255,255,255,.24) 50%,transparent 68%);transform:translateX(-120%);animation:artShine 7s ease-in-out infinite}
+.art-sun{box-shadow:0 0 55px rgba(182,139,87,.3);animation:sunPulse 5s ease-in-out infinite}
+.book-back{animation:bookFloat 6s ease-in-out infinite}
+.book-front{animation:bookFloat 6s ease-in-out -2s infinite}
+h1,h2{font-family:var(--font-display);letter-spacing:-.06em}
+h1 em,h2 em{font-style:normal;background:linear-gradient(100deg,#85836a,#b68b57,#85836a);background-size:220% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:gradientFlow 7s linear infinite}
+.eyebrow-line{position:relative}
+.eyebrow-line:after{content:"";position:absolute;left:0;top:-2px;width:5px;height:5px;background:var(--bronze);animation:lineTravel 2.5s ease-in-out infinite}
+.note-mark,.empty-icon{display:inline-block;animation:spinSlow 12s linear infinite}
+.empty-state{animation:riseIn .9s .35s both}
+.subtle-link span{display:inline-block;transition:transform .25s}
+.subtle-link:hover span{transform:translateX(5px)}
+body:before,body:after{content:"";position:fixed;z-index:-1;width:280px;height:280px;border-radius:50%;filter:blur(85px);opacity:.13;pointer-events:none;animation:ambientDrift 15s ease-in-out infinite alternate}
+body:before{top:15%;left:-190px;background:#b68b57}
+body:after{right:-190px;bottom:8%;background:#85836a;animation-delay:-7s}
+@keyframes logoBlink{0%,100%{opacity:.3;box-shadow:0 0 2px rgba(182,139,87,.2)}50%{opacity:1;box-shadow:0 0 9px 3px rgba(182,139,87,.7),0 0 20px rgba(182,139,87,.35)}}
+@keyframes logoGlow{0%,100%{text-shadow:0 0 0 transparent}50%{text-shadow:0 0 13px rgba(182,139,87,.2)}}
+@keyframes headerDrop{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes riseIn{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+@keyframes artIn{from{opacity:0;transform:translateX(30px) scale(.97)}to{opacity:1;transform:translateX(0) scale(1)}}
+@keyframes bookFloat{0%,100%{translate:0 0}50%{translate:0 -9px}}
+@keyframes sunPulse{0%,100%{transform:scale(1);opacity:.82}50%{transform:scale(1.07);opacity:1}}
+@keyframes artShine{0%,55%,100%{transform:translateX(-120%)}75%{transform:translateX(120%)}}
+@keyframes gradientFlow{to{background-position:220% center}}
+@keyframes spinSlow{to{transform:rotate(360deg)}}
+@keyframes lineTravel{0%,100%{left:0}50%{left:20px}}
+@keyframes ambientDrift{to{transform:translate(35px,-25px) scale(1.12)}}
+@media(max-width:800px){.site-header{position:relative}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
