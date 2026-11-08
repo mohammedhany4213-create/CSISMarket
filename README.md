@@ -9,7 +9,7 @@ CS MARCHE is a lightweight marketplace where students can discover products, pub
 - Frontend: HTML, CSS, and vanilla JavaScript
 - Backend: Node.js and Express
 - Database: MongoDB with Mongoose
-- Authentication: secure server-side sessions
+- Authentication: JWT in an HttpOnly cookie (implementation planned)
 - Image storage: Cloudinary (planned)
 
 ## Core features
