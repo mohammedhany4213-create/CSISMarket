@@ -8,75 +8,71 @@
   <title>CS MARCHE — Campus marketplace</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
   <script src="/js/app.js" defer></script>
 </head>
 <body>
-  <div class="top-strip"><span>CS MARCHE</span><span>THE STUDENT MARKETPLACE</span><span>BUY · SELL · REUSE</span></div>
   <header class="site-header">
-    <a class="brand" href="/" aria-label="CS Marche home"><span class="brand-mark">C<span>S</span></span><span>marche<span class="brand-dot">.</span></span></a>
+    <a class="brand" href="/" aria-label="CS Marche home"><span class="brand-mark">CS</span><span>marche<span class="brand-dot">.</span></span></a>
     <nav class="main-nav" aria-label="Main navigation">
-      <a class="active" href="#market">Explore</a>
+      <a class="active" href="#market">Marketplace</a>
       <a href="#how-it-works">How it works</a>
     </nav>
     <div class="header-actions">
       <a class="login-link" href="#login" data-auth-link="login">Log in</a>
-      <a class="button button-primary" href="#register" data-auth-link="register">Create account <span>↗</span></a>
+      <a class="button button-primary" href="#register" data-auth-link="register">Sign up <span>↗</span></a>
     </div>
   </header>
 
   <main>
     <section class="hero">
       <div class="hero-content">
-        <p class="eyebrow"><span></span> MADE FOR CS STUDENTS</p>
-        <h1>Find it here.<br><span>Pass it on.</span></h1>
-        <p class="hero-description">A simpler way to buy and sell with people on your campus.</p>
+        <p class="eyebrow"><span></span> THE CS STUDENT MARKETPLACE</p>
+        <h1>Buy and sell<br><span>on campus.</span></h1>
+        <p class="hero-description">Find useful things from students around you. List what you no longer need.</p>
         <div class="hero-actions">
-          <a class="button button-primary button-large" href="#market">Browse marketplace <span>↗</span></a>
-          <a class="sell-link" href="#register" data-auth-link="register">List an item <span>＋</span></a>
+          <a class="button button-primary button-large" href="#market">Explore items <span>↗</span></a>
+          <a class="sell-link" href="#register" data-auth-link="register">Sell an item <span>＋</span></a>
         </div>
-        <div class="hero-meta"><span class="live-dot"></span> A marketplace for the CS community</div>
       </div>
       <div class="hero-art">
         <div class="art-image"><img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=85" alt="Laptop and study essentials on a desk"></div>
-        <div class="art-card"><span class="art-card-icon">↗</span><div><strong>Good finds.</strong><small>Right around campus.</small></div></div>
-        <div class="art-index">01 / CAMPUS LIFE</div>
+        <div class="art-card"><span class="art-card-icon">↗</span><div><strong>Made for students</strong><small>Buy · Sell · Connect</small></div></div>
+        <div class="art-index">CS MARCHE / 001</div>
       </div>
-      <span class="hero-side-label">YOUR CAMPUS MARKET</span>
     </section>
 
     <section class="market-section" id="market">
       <div class="section-header">
-        <div><p class="eyebrow">THE MARKETPLACE</p><h2>Explore items<span>.</span></h2></div>
-        <p class="section-note">Useful things, ready for a new owner.</p>
+        <div><p class="eyebrow">BROWSE</p><h2>Marketplace<span>.</span></h2></div>
+        <p class="section-note">Items shared by your campus community.</p>
       </div>
       <div class="market-controls">
-        <div class="market-tabs"><button class="market-tab active" type="button">All items</button><button class="market-tab" type="button" disabled>Recently added</button></div>
-        <span class="market-status"><i></i> MARKETPLACE</span>
+        <span class="market-current">All items</span>
+        <span class="market-status"><i></i> NEW LISTINGS</span>
       </div>
       <div class="empty-state">
-        <div class="empty-icon"><span>＋</span></div>
-        <p class="empty-label">NOTHING LISTED YET</p>
-        <h3>Be the first to<br>list something.</h3>
-        <p class="empty-copy">Your next useful find starts with the community.</p>
-        <a class="button button-outline" href="#register" data-auth-link="register">Create an account <span>↗</span></a>
+        <div class="empty-icon">＋</div>
+        <h3>No items yet</h3>
+        <p class="empty-copy">Be the first to add an item.</p>
+        <a class="button button-outline" href="#register" data-auth-link="register">Create account <span>↗</span></a>
       </div>
     </section>
 
     <section class="how-section" id="how-it-works">
-      <div class="how-heading"><p class="eyebrow">STRAIGHTFORWARD BY DESIGN</p><h2>Three steps.<br><span>That’s it.</span></h2></div>
+      <div class="how-heading"><p class="eyebrow">HOW IT WORKS</p><h2>Simple from<br><span>start to finish.</span></h2></div>
       <div class="steps">
-        <article class="step"><span class="step-number">01</span><div class="step-icon">⌕</div><h3>Find</h3><p>Browse items shared by other CS students.</p></article>
-        <article class="step"><span class="step-number">02</span><div class="step-icon">＋</div><h3>List</h3><p>Share something you no longer need.</p></article>
-        <article class="step"><span class="step-number">03</span><div class="step-icon">↗</div><h3>Connect</h3><p>Contact the seller and arrange the exchange.</p></article>
+        <article class="step"><span class="step-number">01</span><h3>Browse</h3><p>Find items listed by students.</p></article>
+        <article class="step"><span class="step-number">02</span><h3>Post</h3><p>Add an item you want to sell.</p></article>
+        <article class="step"><span class="step-number">03</span><h3>Connect</h3><p>Contact the seller directly.</p></article>
       </div>
     </section>
   </main>
 
   <footer class="site-footer">
-    <a class="brand footer-brand" href="/"><span class="brand-mark">C<span>S</span></span><span>marche<span class="brand-dot">.</span></span></a>
-    <span>Made for the CS community.</span>
+    <a class="brand footer-brand" href="/"><span class="brand-mark">CS</span><span>marche<span class="brand-dot">.</span></span></a>
+    <span>© <span id="year"></span> CS MARCHE</span>
     <a href="#market">Back to top ↑</a>
   </footer>
 </body>
