@@ -39,6 +39,9 @@ const apiLimiter = rateLimit({
 });
 
 app.use("/api", apiLimiter);
+app.use("/api/auth", rateLimit({ windowMs: 15 * 60 * 1000, limit: 20, standardHeaders: "draft-8", legacyHeaders: false }));
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/products", require("./routes/productRoutes"));
 app.use(express.static(path.join(__dirname, "..", "public")));
 
 app.get("/api/health", (_req, res) => {
