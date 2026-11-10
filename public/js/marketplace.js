@@ -69,7 +69,7 @@ async function productPage() {
     const phone=(seller.whatsapp||seller.phone||"").replace(/\D/g,"");
     const contact=phone ? "https://wa.me/"+phone : "mailto:"+encodeURIComponent(seller.email||"");
     host.innerHTML='<div class="detail-image"><img src="'+(item.imageUrl?escapeHtml(item.imageUrl):"https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80")+'" alt="'+escapeHtml(item.title)+'"></div><article class="detail-copy"><span class="section-index">'+escapeHtml(categoryLabel(item.category))+' · '+escapeHtml(conditionLabel(item.condition))+'</span><h1>'+escapeHtml(item.title)+'</h1><strong class="detail-price">'+money(item.price)+'</strong><p class="detail-description">'+escapeHtml(item.description)+'</p><div class="seller-panel"><span class="form-eyebrow">THE PERSON BEHIND IT</span><h3>'+escapeHtml(seller.name||"Campus seller")+'</h3><p>Connect directly to ask a question or arrange a handoff.</p>'+(phone?'<a class="button button-dark button-full" target="_blank" rel="noopener noreferrer" href="'+contact+'">Chat on WhatsApp ↗</a>':'<p class="muted-note">Seller has not added a WhatsApp number yet.</p>')+'</div><a class="text-link back-link" href="/market.html">← Back to the market</a></article>';
-  } catch(error){host.innerHTML='<div class="empty-results"><h2>We couldn't find this listing.</h2><p>'+escapeHtml(error.message)+'</p><a href="/market.html">Back to the market</a></div>';}
+  } catch(error){host.innerHTML='<div class="empty-results"><h2>We could not find this listing.</h2><p>'+escapeHtml(error.message)+'</p><a href="/market.html">Back to the market</a></div>';}
 }
 async function dashboardPage() {
   const grid = $("#my-listings");
