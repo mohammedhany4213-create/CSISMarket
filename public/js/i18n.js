@@ -190,7 +190,10 @@
   const translateNode = (node, toArabic) => {
     if (node.nodeType === Node.TEXT_NODE) {
       const key = keyFor(node.nodeValue);
-      if (key) node.nodeValue = toArabic ? map[key] : originalText.get(key) || key;
+      if (key) {
+        const nextValue = toArabic ? map[key] : originalText.get(key) || key;
+        if (node.nodeValue !== nextValue) node.nodeValue = nextValue;
+      }
       return;
     }
     if (node.nodeType !== Node.ELEMENT_NODE || ["SCRIPT","STYLE","NOSCRIPT"].includes(node.tagName)) return;
@@ -200,14 +203,16 @@
       if (!value) continue;
       const key = keyFor(value);
       if (key) {
-        if (toArabic) node.setAttribute(attr, map[key]);
-        else node.setAttribute(attr, originalText.get(key) || key);
+        const nextValue = toArabic ? map[key] : originalText.get(key) || key;
+        if (value !== nextValue) node.setAttribute(attr, nextValue);
       }
     }
     if (node.tagName === "OPTION" && node.value) {
       const key = keyFor(node.textContent);
-      if (key && toArabic) node.textContent = map[key];
-      else if (key && !toArabic) node.textContent = originalText.get(key) || key;
+      if (key) {
+        const nextValue = toArabic ? map[key] : originalText.get(key) || key;
+        if (node.textContent !== nextValue) node.textContent = nextValue;
+      }
     }
   };
   const originalText = new Map(Object.keys(map).map((key) => [key, key]));
