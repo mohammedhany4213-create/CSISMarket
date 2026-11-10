@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const { z } = require("zod");
 const User = require("../models/User");
 const env = require("../config/env");
+const { isAllowedStudentEmail } = require("../utils/studentEmail");
 
 const registerSchema = z.object({
   name: z.string().trim().min(2).max(60),
@@ -21,8 +22,8 @@ function getSessionMaxAge(value) {
   return Number(match[1]) * units[match[2].toLowerCase()];
 }
 
-function setSession(res, userId) {
-  const token = jwt.sign({ sub: userId }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN });
+function setSession(res, user) {
+  const token = jwt.sign({ sub: user.id, ver: user.tokenVersion || 0 }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN });
   res.cookie("cs_marche_token", token, {
     httpOnly: true, secure: env.NODE_ENV === "production", sameSite: "lax",
     maxAge: getSessionMaxAge(env.JWT_EXPIRES_IN), path: "/"
@@ -33,11 +34,12 @@ exports.register = async (req, res) => {
   const parsed = registerSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ success: false, message: "Check the form fields and try again.", errors: parsed.error.flatten().fieldErrors });
   const data = parsed.data;
+  if (!isAllowedStudentEmail(data.email, env.ALLOWED_EMAIL_DOMAINS)) return res.status(400).json({ success: false, message: "Use an email address from the approved student domain." });
   const exists = await User.exists({ email: data.email.toLowerCase() });
-  if (exists) return res.status(409).json({ success: false, message: "An account with this email already exists." });
+  if (exists) return res.status(400).json({ success: false, message: "Unable to create an account with these details." });
   const passwordHash = await argon2.hash(data.password);
   const user = await User.create({ name: data.name, email: data.email, passwordHash, phone: data.phone, whatsapp: data.whatsapp });
-  setSession(res, user.id);
+  setSession(res, user);
   res.status(201).json({ success: true, user: { id: user.id, name: user.name, email: user.email } });
 };
 
@@ -48,11 +50,12 @@ exports.login = async (req, res) => {
   if (!user || !(await argon2.verify(user.passwordHash, parsed.data.password))) {
     return res.status(401).json({ success: false, message: "Email or password is incorrect." });
   }
-  setSession(res, user.id);
+  setSession(res, user);
   res.json({ success: true, user: { id: user.id, name: user.name, email: user.email } });
 };
 
-exports.logout = (_req, res) => {
+exports.logout = async (req, res) => {
+  await User.findByIdAndUpdate(req.user.id, { $inc: { tokenVersion: 1 } });
   res.clearCookie("cs_marche_token", { httpOnly: true, secure: env.NODE_ENV === "production", sameSite: "lax", path: "/" });
   res.json({ success: true, message: "You have been logged out." });
 };
