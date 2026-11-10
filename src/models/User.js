@@ -6,7 +6,8 @@ const userSchema = new mongoose.Schema({
   passwordHash: { type: String, required: true, select: false },
   phone: { type: String, trim: true, default: "", maxlength: 20 },
   whatsapp: { type: String, trim: true, default: "", maxlength: 20 },
-  bio: { type: String, trim: true, default: "", maxlength: 240 }
+  bio: { type: String, trim: true, default: "", maxlength: 240 },
+  tokenVersion: { type: Number, default: 0, select: false }
 }, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema);
