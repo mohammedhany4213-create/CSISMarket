@@ -184,3 +184,40 @@ h1 em{color:#777d4b}
  html{scroll-behavior:auto}
  *,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}
 }
+
+/* Quiet motion and image details */
+.kicker-spark{margin-left:3px;color:var(--lime-dark);font-size:14px;animation:spark-turn 12s linear infinite}
+.market-gallery{display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:14px;margin:8px 0 34px}
+.gallery-card{height:180px;position:relative;overflow:hidden;background:var(--cream-deep)}
+.gallery-card-wide{height:220px}
+.gallery-card:after{position:absolute;inset:45% 0 0;content:"";background:linear-gradient(transparent,rgba(28,27,22,.62))}
+.gallery-card img{transition:transform .7s cubic-bezier(.2,.7,.2,1);filter:saturate(.72)}
+.gallery-card:hover img{transform:scale(1.055)}
+.gallery-card span{position:absolute;z-index:1;left:17px;bottom:15px;color:#fff;font-size:8px;font-weight:700;letter-spacing:.16em}
+.step{grid-template-columns:30px 34px 1fr 20px}
+.step-icon{width:31px;height:31px;display:grid;place-items:center;border:1px solid #c9c5b8;border-radius:50%;color:#777d4b;transition:background .25s,color .25s,transform .25s}
+.step-icon svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.step:hover .step-icon{background:var(--lime);color:var(--ink);transform:translateY(-3px) rotate(-7deg)}
+.step-arrow{transition:transform .25s}
+.step:hover .step-arrow{transform:translate(3px,-3px)}
+.button span{display:inline-block;transition:transform .2s}
+.button:hover span{transform:translate(3px,-2px)}
+.hero-photo-main img{animation:photo-arrive .9s both}
+.hero-photo-detail img{animation:photo-arrive 1.1s .12s both}
+.visual-stamp{animation:stamp-arrive .7s .35s both}
+.reveal-ready .hero-copy,.reveal-ready .hero-visual,.reveal-ready .market-heading,.reveal-ready .market-gallery,.reveal-ready .empty-state,.reveal-ready .manifesto-main,.reveal-ready .step,.reveal-ready .closing-cta>div,.reveal-ready .closing-cta>.button{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s cubic-bezier(.2,.7,.2,1)}
+.reveal-ready .is-visible{opacity:1;transform:translateY(0)}
+@keyframes photo-arrive{from{opacity:0;transform:scale(1.035)}to{opacity:1;transform:scale(1)}}
+@keyframes stamp-arrive{from{opacity:0;transform:translateY(12px) rotate(0)}to{opacity:1;transform:translateY(0) rotate(9deg)}}
+@keyframes spark-turn{to{transform:rotate(360deg)}}
+@media(max-width:700px){
+ .market-gallery{grid-template-columns:1fr 1fr;gap:9px;margin-bottom:25px}
+ .gallery-card,.gallery-card-wide{height:145px}
+ .gallery-card-wide{grid-column:1/-1;height:175px}
+ .step{grid-template-columns:26px 32px 1fr 20px}
+}
+@media(prefers-reduced-motion:reduce){
+ .kicker-spark,.hero-photo-main img,.hero-photo-detail img,.visual-stamp{animation:none!important}
+ .gallery-card img,.step-icon,.step-arrow,.button span{transition:none!important}
+ .reveal-ready .hero-copy,.reveal-ready .hero-visual,.reveal-ready .market-heading,.reveal-ready .market-gallery,.reveal-ready .empty-state,.reveal-ready .manifesto-main,.reveal-ready .step,.reveal-ready .closing-cta>div,.reveal-ready .closing-cta>.button{opacity:1;transform:none;transition:none}
+}
