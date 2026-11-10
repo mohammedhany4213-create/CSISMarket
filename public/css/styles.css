@@ -291,3 +291,66 @@ h1 em{color:#777d4b}
 .toast.show{opacity:1;transform:translateY(0)}
 @media(max-width:800px){.page-shell{padding:55px 7% 75px}.form-layout,.editor-layout{grid-template-columns:1fr;gap:30px}.form-aside h1{font-size:55px}.surface-form{padding:27px}.product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.product-image{height:190px}#product-detail{grid-template-columns:1fr;gap:25px}.detail-image{height:400px}.browse-tools{grid-template-columns:1fr 1fr}.search-field{grid-column:1/-1}.browse-tools .button{height:46px}}
 @media(max-width:520px){.product-grid{grid-template-columns:1fr 1fr;gap:10px}.product-image{height:145px}.product-card-info{padding:12px}.product-card h3{font-size:13px}.product-card-top{font-size:7px}.product-card-top strong{font-size:10px}.form-two{grid-template-columns:1fr}.surface-form{padding:22px}.browse-tools{grid-template-columns:1fr}.search-field{grid-column:auto}.browse-tools select,.browse-tools .button{height:44px}.detail-image{height:300px}.detail-copy h1{font-size:43px}.results-meta{font-size:9px}.page-heading h1{font-size:54px}}
+
+/* Darker, warmer visual system + Arabic layout support */
+:root{
+ color-scheme:light;
+ --cream:#d9d5c9;
+ --cream-deep:#c9c4b6;
+ --paper:#e9e5da;
+ --ink:#211f1a;
+ --muted:#625f55;
+ --line:#c5c0b3;
+ --lime:#c7d65a;
+ --lime-dark:#79852d;
+}
+body{background:var(--cream);color:var(--ink)}
+.site-header{background:#d2cec1;border-color:#bcb7a9}
+.market-section{background:#e4dfd3}
+.manifesto{background:#c9c4b6}
+.announcement{background:#1b1a16}
+.button-dark{background:#211f1a;color:#f2eee3}
+.button-dark:hover{background:#3a382f}
+.surface-form,.seller-panel,.product-card{background:#f0ece2}
+.page-shell{background:#d9d5c9}
+.product-image{background:#c9c4b6}
+.empty-sun{background:#c9c4b6}
+.detail-image{background:#c9c4b6}
+.language-toggle{min-height:36px;min-width:58px;padding:0 12px;border:1px solid #9c9789;background:transparent;color:var(--ink);font:700 11px var(--sans);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.language-toggle:hover{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.header-actions{gap:15px}
+.is-arabic{font-family:"Noto Sans Arabic","DM Sans",Arial,sans-serif}
+.is-arabic .brand-name,.is-arabic h1,.is-arabic h2,.is-arabic h3,.is-arabic p,.is-arabic label,.is-arabic button,.is-arabic input,.is-arabic textarea,.is-arabic select{font-family:"Noto Sans Arabic","DM Sans",Arial,sans-serif}
+.is-arabic h1,.is-arabic h2,.is-arabic h3{letter-spacing:0;line-height:1.35}
+.is-arabic h1 em,.is-arabic h2 em{font-family:"Noto Sans Arabic",Arial,sans-serif;font-weight:700}
+.is-arabic .hero{direction:rtl}
+.is-arabic .hero-copy,.is-arabic .market-heading,.is-arabic .manifesto-main,.is-arabic .form-aside,.is-arabic .surface-form,.is-arabic .detail-copy{text-align:right}
+.is-arabic .hero-cta,.is-arabic .hero-footnote,.is-arabic .kicker{direction:rtl}
+.is-arabic .hero-visual{direction:ltr}
+.is-arabic .hero-side-note{right:auto;left:3.3%;writing-mode:vertical-rl}
+.is-arabic .market-topline,.is-arabic .manifesto-top,.is-arabic .results-meta,.is-arabic .dashboard-toolbar{direction:rtl}
+.is-arabic .market-heading{flex-direction:row}
+.is-arabic .step{direction:rtl;text-align:right}
+.is-arabic .step+.step{padding-right:22px;padding-left:0}
+.is-arabic .step:last-child{border-right:0}
+.is-arabic .step:first-child{border-right:0}
+.is-arabic .step-arrow{transform:scaleX(-1)}
+.is-arabic .form-two{direction:rtl}
+.is-arabic .surface-form input,.is-arabic .surface-form textarea,.is-arabic .surface-form select{text-align:right;direction:rtl}
+.is-arabic .search-field{direction:rtl;padding:0 14px 0 0}
+.is-arabic .product-card-info,.is-arabic .product-card-top{direction:rtl;text-align:right}
+.is-arabic .card-actions,.is-arabic .pagination{direction:rtl}
+.is-arabic .detail-copy .section-index{direction:rtl}
+.is-arabic .seller-panel{text-align:right}
+.is-arabic .site-footer{direction:rtl}
+.is-arabic .back-top{text-align:left}
+.is-arabic .toast{right:auto;left:24px}
+.is-arabic .form-foot{text-align:center}
+.is-arabic .form-error{text-align:right}
+@media(max-width:700px){
+ .language-toggle{min-height:34px;min-width:52px;padding:0 8px;font-size:10px}
+ .header-actions{gap:8px}
+ .is-arabic .hero{direction:rtl}
+ .is-arabic .market-heading{flex-direction:column;align-items:flex-start}
+ .is-arabic .step+.step{padding-right:0}
+}
