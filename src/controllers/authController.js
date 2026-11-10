@@ -15,7 +15,7 @@ const loginSchema = z.object({ email: z.string().trim().email(), password: z.str
 
 function getSessionMaxAge(value) {
   if (typeof value === "number") return value * 1000;
-  const match = /^(\\d+)(s|m|h|d)$/i.exec(String(value));
+  const match = /^(\d+)(s|m|h|d)$/i.exec(String(value));
   if (!match) return 24 * 60 * 60 * 1000;
   const units = { s: 1000, m: 60 * 1000, h: 60 * 60 * 1000, d: 24 * 60 * 60 * 1000 };
   return Number(match[1]) * units[match[2].toLowerCase()];
