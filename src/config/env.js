@@ -16,7 +16,7 @@ const envSchema = z.object({
 
 const parsed = envSchema.safeParse(process.env);
 
-if (!parsed.success) {
+if (!parsed.success || (parsed.data?.NODE_ENV === "production" && (!parsed.data.APP_ORIGIN || !parsed.data.ALLOWED_EMAIL_DOMAINS.trim()))) {
   console.error("Invalid environment configuration:");
   console.error(parsed.error.flatten().fieldErrors);
   process.exit(1);
