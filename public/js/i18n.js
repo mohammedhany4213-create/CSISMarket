@@ -255,6 +255,7 @@
     localStorage.setItem("cs-marche-language", language);
     apply();
     window.dispatchEvent(new CustomEvent("cs-marche-language-change", { detail: { language } }));
+    if (typeof window.oncsMarcheLanguageChange === "function") window.oncsMarcheLanguageChange();
   });
   const observer = new MutationObserver((records) => {
     if (translating || language !== "ar") return;
