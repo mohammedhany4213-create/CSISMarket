@@ -49,7 +49,7 @@ async function marketPage() {
       const data = await api("/api/products?"+params);
       $("#results-count").textContent = data.pagination.total + (isArabic() ? " إعلان" : (data.pagination.total === 1 ? " listing" : " listings"));
       grid.innerHTML = data.items.length ? data.items.map((item) => productCard(item)).join("") : '<div class="empty-results"><span>✳</span><h2>Nothing here just yet.</h2><p>Try another search, or be the first to list something.</p><a class="button button-dark" href="/create-listing.html">List an item ↗</a></div>';
-      $("#pagination").innerHTML = data.pagination.pages > 1 ? '<button '+(page===1?'disabled':'')+' data-page="'+(page-1)+'">← Previous</button><span>'+localLabel('Page','صفحة')+' '+page+' '+localLabel('of','من')+' '+data.pagination.pages+'+'</span><button '+(page===data.pagination.pages?'disabled':'')+' data-page="'+(page+1)+'">Next →</button>' : "";
+      $("#pagination").innerHTML = data.pagination.pages > 1 ? '<button '+(page===1?'disabled':'')+' data-page="'+(page-1)+'">← Previous</button><span>'+localLabel('Page','صفحة')+' '+page+' '+localLabel('of','من')+' '+data.pagination.pages+'</span><button '+(page===data.pagination.pages?'disabled':'')+' data-page="'+(page+1)+'">Next →</button>' : "";
     } catch (error) { grid.innerHTML = '<p class="form-error">'+escapeHtml(error.message)+'</p>'; }
   };
   $("#search-button").addEventListener("click", () => { page=1; load(); });
