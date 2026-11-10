@@ -6,7 +6,7 @@ A bilingual (English / Arabic) student-to-student marketplace for the CS communi
 
 - Registration, login, logout, HttpOnly JWT session cookies, and Argon2 password hashing.
 - Public product browsing with text search, category filtering, and pagination.
-- Listing details with seller contact information protected behind an authenticated contact endpoint.
+- Public listing responses contain seller display names only. Seller WhatsApp contact is served by a separate authenticated endpoint.
 - Seller availability controls to mark a listing as sold or available.
 - Egyptian WhatsApp number normalization before generating chat links.
 - Create, edit, and delete your own listings with ownership enforcement.
@@ -75,7 +75,9 @@ TRUST_PROXY=0
 | GET | `/api/auth/me` | Signed in | Current account |
 | PATCH | `/api/auth/profile` | Signed in | Update profile |
 | GET | `/api/products` | Public | Search and browse |
-| GET | `/api/products/:id` | Public | Listing details |
+| GET | `/api/products/:id` | Public | Listing details without private contact data |
+| GET | `/api/products/:id/contact` | Signed in | Seller WhatsApp contact |
+| PATCH | `/api/products/:id/availability` | Owner | Mark a listing sold or available |
 | GET | `/api/products/mine` | Signed in | Your listings |
 | POST | `/api/products` | Signed in | Publish listing |
 | PATCH | `/api/products/:id` | Owner | Edit listing |
@@ -105,4 +107,4 @@ Listings currently accept an HTTPS image URL. Direct image uploads and Cloudinar
 
 ## Security
 
-Passwords are hashed with Argon2. Session tokens use HttpOnly, SameSite=Lax cookies. API requests are rate-limited, inputs are validated, and listing mutations are restricted to their owner. Never commit `.env` or production secrets.
+Passwords are hashed with Argon2. Session tokens use HttpOnly, SameSite=Lax cookies and a per-user token version for logout revocation. Unsafe API requests require a matching Origin header. API requests are rate-limited, inputs are validated, and listing mutations are restricted to their owner. Never commit `.env` or production secrets.
