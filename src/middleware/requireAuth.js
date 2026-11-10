@@ -12,7 +12,7 @@ async function requireAuth(req, res, next) {
     req.user = user;
     next();
   } catch {
-    res.clearCookie("cs_marche_token");
+    res.clearCookie("cs_marche_token", { httpOnly: true, secure: env.NODE_ENV === "production", sameSite: "lax", path: "/" });
     return res.status(401).json({ success: false, message: "Please log in again." });
   }
 }
