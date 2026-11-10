@@ -46,7 +46,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
   const parsed = loginSchema.safeParse(req.body);
   if (!parsed.success) return res.status(400).json({ success: false, message: "Enter a valid email and password." });
-  const user = await User.findOne({ email: parsed.data.email.toLowerCase() }).select("+passwordHash");
+  const user = await User.findOne({ email: parsed.data.email.toLowerCase() }).select("+passwordHash +tokenVersion");
   if (!user || !(await argon2.verify(user.passwordHash, parsed.data.password))) {
     return res.status(401).json({ success: false, message: "Email or password is incorrect." });
   }
@@ -60,7 +60,7 @@ exports.logout = async (req, res) => {
   res.json({ success: true, message: "You have been logged out." });
 };
 
-exports.me = (req, res) => res.json({ success: true, user: req.user });
+exports.me = (req, res) => res.json({ success: true, user: { id: req.user.id, name: req.user.name, email: req.user.email, phone: req.user.phone, whatsapp: req.user.whatsapp, bio: req.user.bio } });
 
 exports.updateProfile = async (req, res) => {
   const schema = z.object({
