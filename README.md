@@ -1,6 +1,6 @@
 # CS MARCHE
 
-A student-to-student marketplace for the CS community. Discover useful items, publish your own listings, and contact sellers directly.
+A bilingual (English / Arabic) student-to-student marketplace for the CS community. Discover useful items, publish your own listings, and contact sellers directly.
 
 ## Features
 
@@ -10,6 +10,7 @@ A student-to-student marketplace for the CS community. Discover useful items, pu
 - Create, edit, and delete your own listings with ownership enforcement.
 - Profile settings for name, phone, WhatsApp, and short bio.
 - Responsive homepage, marketplace, listing details, dashboard, profile, login, and registration pages.
+- Arabic / English language switch with RTL layout and a darker warm-neutral visual theme.
 - Zod request validation, API rate limiting, Helmet security headers, and MongoDB indexes.
 
 ## Stack
@@ -83,6 +84,10 @@ Node.js 20+, Express 5, MongoDB/Mongoose, vanilla HTML/CSS/JavaScript, Argon2, J
 - Configure a persistent image hosting service (such as Cloudinary) before enabling binary image uploads.
 - Configure the production domain, monitoring, backups, and error reporting.
 - Test registration, login, ownership, listing CRUD, search, and WhatsApp contact on the deployed domain.
+
+## Localization
+
+The interface supports English and Arabic. Use the language switch in the header; the selected language is saved in the browser. Arabic pages use right-to-left layout. Listing titles and descriptions are user-generated content and remain as entered by their authors.
 
 ## Image handling limitation
 
