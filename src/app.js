@@ -3,10 +3,12 @@ const helmet = require("helmet");
 const cookieParser = require("cookie-parser");
 const { rateLimit } = require("express-rate-limit");
 const path = require("node:path");
+const env = require("./config/env");
 
 const app = express();
 
 app.disable("x-powered-by");
+if (env.TRUST_PROXY > 0) app.set("trust proxy", env.TRUST_PROXY);
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -26,6 +28,13 @@ app.use(helmet({
 app.use(express.json({ limit: "20kb" }));
 app.use(express.urlencoded({ extended: false, limit: "20kb" }));
 app.use(cookieParser());
+app.use("/api", (req, res, next) => {
+  if (["GET", "HEAD", "OPTIONS"].includes(req.method)) return next();
+  const origin = req.get("origin");
+  const expectedOrigin = env.APP_ORIGIN || (req.protocol + "://" + req.get("host"));
+  if (!origin || origin !== expectedOrigin) return res.status(403).json({ success: false, message: "Request origin is not allowed." });
+  next();
+});
 
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
