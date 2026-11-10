@@ -8,7 +8,7 @@ const productSchema = z.object({
   price: z.coerce.number().min(0).max(100000000),
   category: z.enum(["Books", "Electronics", "Accessories", "Study tools", "Other"]),
   condition: z.enum(["New", "Like new", "Good", "Fair"]),
-  imageUrl: z.union([z.literal(""), z.string().url().max(1000)]).optional().default("")
+  imageUrl: z.union([z.literal(""), z.string().url().max(1000).refine((value) => value.startsWith("https://"), "Image URL must use HTTPS.")]).optional().default("")
 });
 
 exports.list = asyncHandler(async (req, res) => {
