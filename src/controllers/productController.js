@@ -8,7 +8,7 @@ const productSchema = z.object({
   category: z.enum(["Books", "Electronics", "Accessories", "Study tools", "Other"]),
   condition: z.enum(["New", "Like new", "Good", "Fair"]),
   imageUrl: z.union([z.literal(""), z.string().url().max(1000).refine((value) => value.startsWith("https://"), "Image URL must use HTTPS.")]).optional().default("")
-};
+});
 
 exports.list = async (req, res) => {
   const page = Math.max(1, Number.parseInt(req.query.page, 10) || 1);
