@@ -74,6 +74,7 @@ async function productPage() {
 async function dashboardPage() {
   const grid = $("#my-listings");
   if (!grid) return;
+  window.oncsMarcheLanguageChange = dashboardPage;
   grid.onclick = async (event) => {
     const button = event.target.closest("[data-delete]");
     if (!button) return;
