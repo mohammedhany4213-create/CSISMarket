@@ -56,6 +56,7 @@ async function marketPage() {
   $("#search-input").addEventListener("keydown", (event) => { if(event.key==="Enter"){page=1;load();} });
   $("#category-filter").addEventListener("change", () => { page=1;load(); });
   $("#pagination").addEventListener("click", (event) => { const button=event.target.closest("[data-page]"); if(button){page=Number(button.dataset.page);load();window.scrollTo({top:0,behavior:"smooth"});} });
+  window.addEventListener("cs-marche-language-change", load);
   await load();
 }
 async function productPage() {
