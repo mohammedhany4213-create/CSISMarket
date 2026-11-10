@@ -13,11 +13,19 @@ const registerSchema = z.object({
 });
 const loginSchema = z.object({ email: z.string().trim().email(), password: z.string().min(1).max(128) });
 
+function getSessionMaxAge(value) {
+  if (typeof value === "number") return value * 1000;
+  const match = /^(\\d+)(s|m|h|d)$/i.exec(String(value));
+  if (!match) return 24 * 60 * 60 * 1000;
+  const units = { s: 1000, m: 60 * 1000, h: 60 * 60 * 1000, d: 24 * 60 * 60 * 1000 };
+  return Number(match[1]) * units[match[2].toLowerCase()];
+}
+
 function setSession(res, userId) {
   const token = jwt.sign({ sub: userId }, env.JWT_SECRET, { expiresIn: env.JWT_EXPIRES_IN });
   res.cookie("cs_marche_token", token, {
     httpOnly: true, secure: env.NODE_ENV === "production", sameSite: "lax",
-    maxAge: 24 * 60 * 60 * 1000, path: "/"
+    maxAge: getSessionMaxAge(env.JWT_EXPIRES_IN), path: "/"
   });
 }
 
