@@ -1,6 +1,10 @@
 const $ = (selector) => document.querySelector(selector);
 const escapeHtml = (value = "") => String(value).replace(/[&<>"']/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[char]));
 const money = (value) => new Intl.NumberFormat("en-EG", { style: "currency", currency: "EGP", maximumFractionDigits: 2 }).format(value);
+const isArabic = () => document.documentElement.lang === "ar";
+const localLabel = (english, arabic) => isArabic() ? arabic : english;
+const categoryLabel = (value) => isArabic() ? ({ Books: "كتب", Electronics: "إلكترونيات", Accessories: "إكسسوارات", "Study tools": "أدوات دراسة", Other: "أخرى" }[value] || value) : value;
+const conditionLabel = (value) => isArabic() ? ({ New: "جديد", "Like new": "كالجديد", Good: "جيد", Fair: "مقبول" }[value] || value) : value;
 const api = async (url, options = {}) => {
   const response = await fetch(url, { credentials: "same-origin", ...options, headers: { ...(options.body ? { "Content-Type": "application/json" } : {}), ...(options.headers || {}) } });
   const data = await response.json().catch(() => ({}));
@@ -20,7 +24,7 @@ const nav = async () => {
 };
 const productCard = (item, own = false) => {
   const image = item.imageUrl ? escapeHtml(item.imageUrl) : "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=700&q=80";
-  return '<article class="product-card"><a class="product-image" href="/product.html?id=' + encodeURIComponent(item._id) + '"><img src="' + image + '" alt="' + escapeHtml(item.title) + '" loading="lazy"><span>' + escapeHtml(item.condition) + '</span></a><div class="product-card-info"><div class="product-card-top"><span>' + escapeHtml(item.category) + '</span><strong>' + money(item.price) + '</strong></div><h3><a href="/product.html?id=' + encodeURIComponent(item._id) + '">' + escapeHtml(item.title) + '</a></h3><p>by ' + escapeHtml(item.seller?.name || "You") + '</p>' + (own ? '<div class="card-actions"><a href="/create-listing.html?id=' + encodeURIComponent(item._id) + '">Edit</a><button data-delete="' + item._id + '">Delete</button></div>' : '') + '</div></article>';
+  return '<article class="product-card"><a class="product-image" href="/product.html?id=' + encodeURIComponent(item._id) + '"><img src="' + image + '" alt="' + escapeHtml(item.title) + '" loading="lazy"><span>' + escapeHtml(conditionLabel(item.condition)) + '</span></a><div class="product-card-info"><div class="product-card-top"><span>' + escapeHtml(categoryLabel(item.category)) + '</span><strong>' + money(item.price) + '</strong></div><h3><a href="/product.html?id=' + encodeURIComponent(item._id) + '">' + escapeHtml(item.title) + '</a></h3><p>by ' + escapeHtml(item.seller?.name || "You") + '</p>' + (own ? '<div class="card-actions"><a href="/create-listing.html?id=' + encodeURIComponent(item._id) + '">Edit</a><button data-delete="' + item._id + '">Delete</button></div>' : '') + '</div></article>';
 };
 async function authPage(page) {
   const form = $("#"+page+"-form"); if (!form) return;
@@ -43,7 +47,7 @@ async function marketPage() {
     if ($("#category-filter").value) params.set("category", $("#category-filter").value);
     try {
       const data = await api("/api/products?"+params);
-      $("#results-count").textContent = data.pagination.total + (data.pagination.total === 1 ? " listing" : " listings");
+      $("#results-count").textContent = data.pagination.total + (isArabic() ? " إعلان" : (data.pagination.total === 1 ? " listing" : " listings"));
       grid.innerHTML = data.items.length ? data.items.map((item) => productCard(item)).join("") : '<div class="empty-results"><span>✳</span><h2>Nothing here just yet.</h2><p>Try another search, or be the first to list something.</p><a class="button button-dark" href="/create-listing.html">List an item ↗</a></div>';
       $("#pagination").innerHTML = data.pagination.pages > 1 ? '<button '+(page===1?'disabled':'')+' data-page="'+(page-1)+'">← Previous</button><span>Page '+page+' of '+data.pagination.pages+'</span><button '+(page===data.pagination.pages?'disabled':'')+' data-page="'+(page+1)+'">Next →</button>' : "";
     } catch (error) { grid.innerHTML = '<p class="form-error">'+escapeHtml(error.message)+'</p>'; }
@@ -63,7 +67,7 @@ async function productPage() {
     const seller=item.seller||{};
     const phone=(seller.whatsapp||seller.phone||"").replace(/\D/g,"");
     const contact=phone ? "https://wa.me/"+phone : "mailto:"+encodeURIComponent(seller.email||"");
-    host.innerHTML='<div class="detail-image"><img src="'+(item.imageUrl?escapeHtml(item.imageUrl):"https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80")+'" alt="'+escapeHtml(item.title)+'"></div><article class="detail-copy"><span class="section-index">'+escapeHtml(item.category)+' · '+escapeHtml(item.condition)+'</span><h1>'+escapeHtml(item.title)+'</h1><strong class="detail-price">'+money(item.price)+'</strong><p class="detail-description">'+escapeHtml(item.description)+'</p><div class="seller-panel"><span class="form-eyebrow">THE PERSON BEHIND IT</span><h3>'+escapeHtml(seller.name||"Campus seller")+'</h3><p>Connect directly to ask a question or arrange a handoff.</p>'+(phone?'<a class="button button-dark button-full" target="_blank" rel="noopener noreferrer" href="'+contact+'">Chat on WhatsApp ↗</a>':'<p class="muted-note">Seller has not added a WhatsApp number yet.</p>')+'</div><a class="text-link back-link" href="/market.html">← Back to the market</a></article>';
+    host.innerHTML='<div class="detail-image"><img src="'+(item.imageUrl?escapeHtml(item.imageUrl):"https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80")+'" alt="'+escapeHtml(item.title)+'"></div><article class="detail-copy"><span class="section-index">'+escapeHtml(item.category)+' · '+escapeHtml(conditionLabel(item.condition))+'</span><h1>'+escapeHtml(item.title)+'</h1><strong class="detail-price">'+money(item.price)+'</strong><p class="detail-description">'+escapeHtml(item.description)+'</p><div class="seller-panel"><span class="form-eyebrow">THE PERSON BEHIND IT</span><h3>'+escapeHtml(seller.name||"Campus seller")+'</h3><p>Connect directly to ask a question or arrange a handoff.</p>'+(phone?'<a class="button button-dark button-full" target="_blank" rel="noopener noreferrer" href="'+contact+'">Chat on WhatsApp ↗</a>':'<p class="muted-note">Seller has not added a WhatsApp number yet.</p>')+'</div><a class="text-link back-link" href="/market.html">← Back to the market</a></article>';
   } catch(error){host.innerHTML='<div class="empty-results"><h2>We couldn't find this listing.</h2><p>'+escapeHtml(error.message)+'</p><a href="/market.html">Back to the market</a></div>';}
 }
 async function dashboardPage() {
@@ -85,7 +89,7 @@ async function dashboardPage() {
   };
   try {
     const { items } = await api("/api/products/mine");
-    $("#dashboard-count").textContent = items.length + " total";
+    $("#dashboard-count").textContent = items.length + (isArabic() ? " إجمالي" : " total");
     grid.innerHTML = items.length
       ? items.map((item) => productCard(item, true)).join("")
       : '<div class="empty-results"><h2>Your market starts here.</h2><p>You haven\'t listed anything yet.</p><a class="button button-dark" href="/create-listing.html">Create your first listing ↗</a></div>';
