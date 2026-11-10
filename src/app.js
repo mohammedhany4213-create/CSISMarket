@@ -58,6 +58,10 @@ app.use("/api", (_req, res) => {
   });
 });
 
+app.use((_req, res) => {
+  res.status(404).sendFile(path.join(__dirname, "..", "public", "404.html"));
+});
+
 app.use((err, _req, res, _next) => {
   if (err.code === 11000) {
     return res.status(409).json({ success: false, message: "This record already exists." });
