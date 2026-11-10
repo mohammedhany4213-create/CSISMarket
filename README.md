@@ -6,7 +6,9 @@ A bilingual (English / Arabic) student-to-student marketplace for the CS communi
 
 - Registration, login, logout, HttpOnly JWT session cookies, and Argon2 password hashing.
 - Public product browsing with text search, category filtering, and pagination.
-- Listing details with seller contact information and WhatsApp contact.
+- Listing details with seller contact information protected behind an authenticated contact endpoint.
+- Seller availability controls to mark a listing as sold or available.
+- Egyptian WhatsApp number normalization before generating chat links.
 - Create, edit, and delete your own listings with ownership enforcement.
 - Profile settings for name, phone, WhatsApp, and short bio.
 - Responsive homepage, marketplace, listing details, dashboard, profile, login, and registration pages.
@@ -33,6 +35,9 @@ Node.js 20+, Express 5, MongoDB/Mongoose, vanilla HTML/CSS/JavaScript, Argon2, J
    PORT=3000
    MONGODB_URI=mongodb://127.0.0.1:27017/cs_marche
    JWT_SECRET=replace-with-a-random-secret-at-least-32-characters
+ALLOWED_EMAIL_DOMAINS=student.example.edu
+APP_ORIGIN=http://localhost:3000
+TRUST_PROXY=0
    JWT_EXPIRES_IN=1d
    ```
 
@@ -76,11 +81,16 @@ Node.js 20+, Express 5, MongoDB/Mongoose, vanilla HTML/CSS/JavaScript, Argon2, J
 | PATCH | `/api/products/:id` | Owner | Edit listing |
 | DELETE | `/api/products/:id` | Owner | Delete listing |
 
+## Student email restriction
+
+Set `ALLOWED_EMAIL_DOMAINS` to a comma-separated list of institution email domains before launch. It is intentionally empty by default because the correct campus domain must be supplied by the institution owner. Until configured, registration accepts any valid email.
+
 ## Production checklist
 
 - Use MongoDB Atlas or managed MongoDB with a dedicated database user, restricted network access, and backups.
 - Set `NODE_ENV=production`, a unique strong `JWT_SECRET`, and the production `MONGODB_URI`.
 - Deploy behind HTTPS. Secure cookies are enabled automatically in production.
+- Set `APP_ORIGIN` to the exact public origin. Set `TRUST_PROXY` to the exact number of trusted reverse proxies.
 - Configure a persistent image hosting service (such as Cloudinary) before enabling binary image uploads.
 - Configure the production domain, monitoring, backups, and error reporting.
 - Test registration, login, ownership, listing CRUD, search, and WhatsApp contact on the deployed domain.
