@@ -24,7 +24,7 @@ const nav = async () => {
 };
 const productCard = (item, own = false) => {
   const image = item.imageUrl ? escapeHtml(item.imageUrl) : "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=700&q=80";
-  return '<article class="product-card"><a class="product-image" href="/product.html?id=' + encodeURIComponent(item._id) + '"><img src="' + image + '" alt="' + escapeHtml(item.title) + '" loading="lazy"><span>' + escapeHtml(conditionLabel(item.condition)) + '</span></a><div class="product-card-info"><div class="product-card-top"><span>' + escapeHtml(categoryLabel(item.category)) + '</span><strong>' + money(item.price) + '</strong></div><h3><a href="/product.html?id=' + encodeURIComponent(item._id) + '">' + escapeHtml(item.title) + '</a></h3><p><span>by</span> ' + escapeHtml(item.seller?.name || "You") + '</p>' + (own ? '<div class="card-actions"><a href="/create-listing.html?id=' + encodeURIComponent(item._id) + '">Edit</a><button data-delete="' + item._id + '">Delete</button></div>' : '') + '</div></article>';
+  return '<article class="product-card"><a class="product-image" href="/product.html?id=' + encodeURIComponent(item._id) + '"><img src="' + image + '" alt="' + escapeHtml(item.title) + '" loading="lazy"><span>' + escapeHtml(conditionLabel(item.condition)) + '</span></a><div class="product-card-info"><div class="product-card-top"><span>' + escapeHtml(categoryLabel(item.category)) + '</span><strong>' + money(item.price) + '</strong></div><h3><a href="/product.html?id=' + encodeURIComponent(item._id) + '">' + escapeHtml(item.title) + '</a></h3><p><span>by</span> ' + escapeHtml(item.seller?.name || "You") + '</p>' + (own ? '<div class="card-actions"><a href="/create-listing.html?id=' + encodeURIComponent(item._id) + '">Edit</a><button data-availability="' + item._id + '" data-next="' + (!item.isAvailable) + '">' + (item.isAvailable ? 'Mark sold' : 'Mark available') + '</button><button data-delete="' + item._id + '">Delete</button></div>' : '') + '</div></article>';
 };
 async function authPage(page) {
   const form = $("#"+page+"-form"); if (!form) return;
@@ -66,9 +66,8 @@ async function productPage() {
   try {
     const {item}=await api("/api/products/"+encodeURIComponent(id));
     const seller=item.seller||{};
-    const phone=(seller.whatsapp||seller.phone||"").replace(/\D/g,"");
-    const contact=phone ? "https://wa.me/"+phone : "mailto:"+encodeURIComponent(seller.email||"");
-    host.innerHTML='<div class="detail-image"><img src="'+(item.imageUrl?escapeHtml(item.imageUrl):"https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80")+'" alt="'+escapeHtml(item.title)+'"></div><article class="detail-copy"><span class="section-index">'+escapeHtml(categoryLabel(item.category))+' · '+escapeHtml(conditionLabel(item.condition))+'</span><h1>'+escapeHtml(item.title)+'</h1><strong class="detail-price">'+money(item.price)+'</strong><p class="detail-description">'+escapeHtml(item.description)+'</p><div class="seller-panel"><span class="form-eyebrow">THE PERSON BEHIND IT</span><h3>'+escapeHtml(seller.name||"Campus seller")+'</h3><p>Connect directly to ask a question or arrange a handoff.</p>'+(phone?'<a class="button button-dark button-full" target="_blank" rel="noopener noreferrer" href="'+contact+'">Chat on WhatsApp ↗</a>':'<p class="muted-note">Seller has not added a WhatsApp number yet.</p>')+'</div><a class="text-link back-link" href="/market.html">← Back to the market</a></article>';
+    host.innerHTML='<div class="detail-image"><img src="'+(item.imageUrl?escapeHtml(item.imageUrl):"https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1000&q=80")+'" alt="'+escapeHtml(item.title)+'"></div><article class="detail-copy"><span class="section-index">'+escapeHtml(categoryLabel(item.category))+' · '+escapeHtml(conditionLabel(item.condition))+'</span><h1>'+escapeHtml(item.title)+'</h1><strong class="detail-price">'+money(item.price)+'</strong><p class="detail-description">'+escapeHtml(item.description)+'</p><div class="seller-panel"><span class="form-eyebrow">THE PERSON BEHIND IT</span><h3>'+escapeHtml(seller.name||"Campus seller")+'</h3><p>Sign in to view seller contact details and arrange a handoff.</p><button class="button button-dark button-full" id="contact-seller" type="button">Contact seller ↗</button></div><a class="text-link back-link" href="/market.html">← Back to the market</a></article>';
+    $("#contact-seller").addEventListener("click",async()=>{try{const {contact}=await api("/api/products/"+encodeURIComponent(id)+"/contact");if(contact.whatsappUrl)location.href=contact.whatsappUrl;else toast("Seller has not added a valid WhatsApp number yet.");}catch(error){if(error.message.toLowerCase().includes("log in"))location.href="/login.html";else toast(error.message);}});
   } catch(error){host.innerHTML='<div class="empty-results"><h2>We could not find this listing.</h2><p>'+escapeHtml(error.message)+'</p><a href="/market.html">Back to the market</a></div>';}
 }
 async function dashboardPage() {
@@ -76,6 +75,16 @@ async function dashboardPage() {
   if (!grid) return;
   window.oncsMarcheLanguageChange = dashboardPage;
   grid.onclick = async (event) => {
+    const availabilityButton = event.target.closest("[data-availability]");
+    if (availabilityButton) {
+      availabilityButton.disabled = true;
+      try {
+        await api("/api/products/" + availabilityButton.dataset.availability + "/availability", { method: "PATCH", body: JSON.stringify({ isAvailable: availabilityButton.dataset.next === "true" }) });
+        toast(availabilityButton.dataset.next === "true" ? "Listing is available again." : "Listing marked as sold.");
+        await dashboardPage();
+      } catch (error) { toast(error.message); availabilityButton.disabled = false; }
+      return;
+    }
     const button = event.target.closest("[data-delete]");
     if (!button) return;
     if (!confirm("Delete this listing? This cannot be undone.")) return;
