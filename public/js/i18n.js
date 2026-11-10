@@ -183,7 +183,7 @@
     if (!raw) return null;
     if (map[raw]) return raw;
     if (reverse.has(raw)) return reverse.get(raw);
-    const normalized = raw.replace(/\\s+/g, ' ');
+    const normalized = raw.replace(/\s+/g, ' ');
     if (map[normalized]) return normalized;
     return reverse.get(normalized) || null;
   };
