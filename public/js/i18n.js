@@ -100,6 +100,15 @@
       "optional":"اختياري",
       "WhatsApp ":"واتساب ",
       "Already a member?":"عندك حساب بالفعل؟",
+      "New around here?":"لسه جديد هنا؟",
+      "by":"بواسطة",
+      "Enter a valid email and password.":"اكتب بريد إلكتروني وكلمة مرور صحيحة.",
+      "Your session is no longer valid.":"انتهت صلاحية جلستك. سجّل الدخول مرة أخرى.",
+      "An unexpected error occurred.":"حصل خطأ غير متوقع.",
+      "Too many requests. Please try again later.":"طلبات كتير في وقت قصير. حاول تاني بعد شوية.",
+      "This record already exists.":"البيانات دي موجودة بالفعل.",
+      "The submitted data is invalid.":"البيانات المدخلة غير صحيحة.",
+      "Listing not found or you don't own it.":"الإعلان غير موجود أو مش تابع لحسابك.",
       "YOUR CORNER OF THE MARKET":"مساحتك في السوق",
       "Your ":"إعلاناتك ",
       "listings.":"",
@@ -168,12 +177,15 @@
     }
   };
   const map = dictionaries.ar;
+  const reverse = new Map(Object.entries(map).map(([english, arabic]) => [arabic, english]));
   const keyFor = (value) => {
     const raw = value.trim();
     if (!raw) return null;
     if (map[raw]) return raw;
-    const normalized = raw.replace(/\s+/g, " ");
-    return map[normalized] ? normalized : null;
+    if (reverse.has(raw)) return reverse.get(raw);
+    const normalized = raw.replace(/\\s+/g, ' ');
+    if (map[normalized]) return normalized;
+    return reverse.get(normalized) || null;
   };
   const translateNode = (node, toArabic) => {
     if (node.nodeType === Node.TEXT_NODE) {
@@ -204,6 +216,9 @@
   const apply = () => {
     if (translating) return;
     translating = true;
+    document.querySelectorAll("option").forEach((option) => {
+      if (!option.hasAttribute("value")) option.setAttribute("value", option.textContent.trim());
+    });
     document.documentElement.lang = language === "ar" ? "ar" : "en";
     document.documentElement.dir = language === "ar" ? "rtl" : "ltr";
     document.body.classList.toggle("is-arabic", language === "ar");
