@@ -50,3 +50,16 @@ exports.logout = (_req, res) => {
 };
 
 exports.me = (req, res) => res.json({ success: true, user: req.user });
+
+exports.updateProfile = async (req, res) => {
+  const schema = z.object({
+    name: z.string().trim().min(2).max(60),
+    phone: z.string().trim().max(20).optional().default(""),
+    whatsapp: z.string().trim().max(20).optional().default(""),
+    bio: z.string().trim().max(240).optional().default("")
+  });
+  const parsed = schema.safeParse(req.body);
+  if (!parsed.success) return res.status(400).json({ success: false, message: "Please check your profile details.", errors: parsed.error.flatten().fieldErrors });
+  const user = await User.findByIdAndUpdate(req.user.id, parsed.data, { new: true, runValidators: true }).select("_id name email phone whatsapp bio");
+  res.json({ success: true, user });
+};
