@@ -366,3 +366,54 @@ body{background:var(--cream);color:var(--ink)}
 .is-arabic .detail-description{direction:rtl;text-align:right}
 .is-arabic .empty-results{text-align:center}
 @media(max-width:520px){.error-language{top:14px;right:5%}.is-arabic .error-language{right:auto;left:5%}}
+
+
+/* Retail-forward CS MARCHE identity */
+:root{--cream:#e3e6e6;--cream-deep:#d5d9d9;--paper:#fff;--ink:#131921;--muted:#565959;--line:#c7cccc;--lime:#ff9900;--lime-dark:#e47911;--serif:"Inter",Arial,sans-serif;--sans:"Inter","Noto Sans Arabic",Arial,sans-serif}
+body{font-family:var(--sans);font-weight:500;background:#e3e6e6;color:#131921}
+.announcement{background:#232f3e;color:#fff;font-weight:800;letter-spacing:.1em}
+.announcement span:last-child{color:#e7e9ec}.announcement b{color:#ff9900}
+.site-header{height:86px;background:#131921;color:#fff;border-bottom:1px solid #39434e}
+.brand{gap:11px;color:#fff;min-width:175px}
+.brand-symbol{width:43px;height:36px;border:0;border-radius:0;display:flex;align-items:center;justify-content:center;color:#fff}
+.brand-symbol svg{width:43px;height:36px;overflow:visible}
+.brand-lockup{display:flex;flex-direction:column;gap:1px}
+.brand-name{font-family:var(--sans);font-size:22px;font-weight:900;letter-spacing:-.065em;line-height:1;color:#fff}
+.brand-name b{font-weight:900;color:#fff}
+.brand-tagline{font-size:7px;font-weight:800;letter-spacing:.19em;color:#c6cbd1}
+.main-nav{gap:32px}.main-nav a,.login-link{color:#e7e9ec;font-size:12px;font-weight:800}
+.main-nav a:after{height:2px;background:#ff9900}
+.main-nav a:hover,.main-nav a.active,.login-link:hover{color:#ffb84d}
+.header-actions{gap:23px}
+.button{border-radius:3px;font-size:12px;font-weight:800;letter-spacing:0}
+.button-dark{background:#ff9900;color:#131921;border-color:#ff9900}
+.button-dark:hover{background:#e88b00;color:#131921}
+h1,h2,h3{font-family:var(--sans);font-weight:800}
+h1{font-weight:900;letter-spacing:-.065em;line-height:1.02}
+h1 em,h2 em{font-family:var(--sans);font-weight:900;font-style:normal;letter-spacing:-.065em;color:#c66b00}
+.market-heading h2,.manifesto-main h2,.closing-cta h2{font-weight:900;letter-spacing:-.065em}
+.market-heading h2 em,.manifesto-main h2 em{color:#c66b00}
+.hero-intro,.market-heading>p,.manifesto-copy{color:#565959;font-weight:500}
+.hero-copy .kicker{color:#565959;font-weight:800}
+.kicker i,.market-status i,.footnote-line{background:#ff9900}
+.visual-stamp{background:#ff9900;color:#131921}.visual-stamp>span{font-family:var(--sans);font-weight:900}
+.button-outline{border-radius:3px;border-color:#879196;font-weight:800}
+.button-outline span,.text-link span,.step-arrow{color:#d66b00}
+.market-section{background:#fff}.market-toolbar,.market-topline,.manifesto-top{border-color:#d5d9d9}
+.gallery-card{border-radius:4px;overflow:hidden}.empty-box{background:#ff9900;border-radius:4px}
+.manifesto{background:#e3e6e6}.step h3,.empty-message h3{font-family:var(--sans);font-weight:800}
+.closing-cta{background:#232f3e;color:#fff}.closing-cta h2 em{color:#ff9900}
+.button-lime{background:#ff9900;color:#131921;border-radius:3px}.button-lime:hover{background:#e88b00}
+.closing-mark{color:#2d3b4b}.closing-mark span{color:#344354}
+.site-footer{background:#131921;border-top-color:#39434e}
+.footer-brand .brand-symbol{border:0}.footer-brand .brand-name{font-size:19px}
+.footer-brand .brand-name b{color:#fff}.footer-brand .brand-tagline{font-size:6px}
+.language-toggle{border:1px solid #69737e;border-radius:3px;background:#232f3e;color:#fff;font-weight:800}
+:focus-visible{outline:3px solid #ff9900;outline-offset:3px}
+@media(max-width:700px){
+ .site-header{height:auto;min-height:72px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px;row-gap:10px}
+ .brand{min-width:130px}.brand-name{font-size:19px}
+ .brand-symbol,.brand-symbol svg{width:36px;height:32px}
+ .main-nav{order:3;width:100%;height:30px;justify-content:center;border-top:1px solid #39434e;padding-top:8px}
+ .header-actions{margin-left:auto;gap:12px}.language-toggle{margin-left:auto}
+}
