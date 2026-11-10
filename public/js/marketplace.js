@@ -67,13 +67,31 @@ async function productPage() {
   } catch(error){host.innerHTML='<div class="empty-results"><h2>We couldn't find this listing.</h2><p>'+escapeHtml(error.message)+'</p><a href="/market.html">Back to the market</a></div>';}
 }
 async function dashboardPage() {
-  const grid=$("#my-listings"); if(!grid)return;
+  const grid = $("#my-listings");
+  if (!grid) return;
+  grid.onclick = async (event) => {
+    const button = event.target.closest("[data-delete]");
+    if (!button) return;
+    if (!confirm("Delete this listing? This cannot be undone.")) return;
+    button.disabled = true;
+    try {
+      await api("/api/products/" + button.dataset.delete, { method: "DELETE" });
+      toast("Listing deleted.");
+      await dashboardPage();
+    } catch (error) {
+      toast(error.message);
+      button.disabled = false;
+    }
+  };
   try {
-    const {items}=await api("/api/products/mine");
-    $("#dashboard-count").textContent=items.length+" total";
-    grid.innerHTML=items.length?items.map(item=>productCard(item,true)).join(""):'<div class="empty-results"><h2>Your market starts here.</h2><p>You haven't listed anything yet.</p><a class="button button-dark" href="/create-listing.html">Create your first listing ↗</a></div>';
-    grid.addEventListener("click",async(event)=>{const button=event.target.closest("[data-delete]");if(!button)return;if(!confirm("Delete this listing? This cannot be undone."))return;try{await api("/api/products/"+button.dataset.delete,{method:"DELETE"});toast("Listing deleted.");dashboardPage();}catch(error){toast(error.message);}});
-  } catch(error){grid.innerHTML='<div class="empty-results"><h2>Log in to see your listings.</h2><a class="button button-dark" href="/login.html">Log in ↗</a></div>';}
+    const { items } = await api("/api/products/mine");
+    $("#dashboard-count").textContent = items.length + " total";
+    grid.innerHTML = items.length
+      ? items.map((item) => productCard(item, true)).join("")
+      : '<div class="empty-results"><h2>Your market starts here.</h2><p>You haven\'t listed anything yet.</p><a class="button button-dark" href="/create-listing.html">Create your first listing ↗</a></div>';
+  } catch {
+    grid.innerHTML = '<div class="empty-results"><h2>Log in to see your listings.</h2><a class="button button-dark" href="/login.html">Log in ↗</a></div>';
+  }
 }
 async function listingFormPage() {
   const form=$("#listing-form");if(!form)return;
