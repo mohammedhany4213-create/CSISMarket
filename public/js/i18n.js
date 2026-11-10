@@ -239,6 +239,7 @@
     language = language === "ar" ? "en" : "ar";
     localStorage.setItem("cs-marche-language", language);
     apply();
+    window.dispatchEvent(new CustomEvent("cs-marche-language-change", { detail: { language } }));
   });
   const observer = new MutationObserver((records) => {
     if (translating || language !== "ar") return;
