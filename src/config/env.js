@@ -16,9 +16,14 @@ const envSchema = z.object({
 
 const parsed = envSchema.safeParse(process.env);
 
-if (!parsed.success || (parsed.data?.NODE_ENV === "production" && (!parsed.data.APP_ORIGIN || !parsed.data.ALLOWED_EMAIL_DOMAINS.trim()))) {
+if (!parsed.success) {
   console.error("Invalid environment configuration:");
   console.error(parsed.error.flatten().fieldErrors);
+  process.exit(1);
+}
+
+if (parsed.data.NODE_ENV === "production" && (!parsed.data.APP_ORIGIN || !parsed.data.ALLOWED_EMAIL_DOMAINS.trim())) {
+  console.error("Production requires APP_ORIGIN and ALLOWED_EMAIL_DOMAINS.");
   process.exit(1);
 }
 
