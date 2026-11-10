@@ -59,6 +59,12 @@ app.use("/api", (_req, res) => {
 });
 
 app.use((err, _req, res, _next) => {
+  if (err.code === 11000) {
+    return res.status(409).json({ success: false, message: "This record already exists." });
+  }
+  if (err.name === "ValidationError" || err.name === "CastError") {
+    return res.status(400).json({ success: false, message: "The submitted data is invalid." });
+  }
   console.error(err);
   res.status(500).json({
     success: false,
