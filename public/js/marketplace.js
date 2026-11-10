@@ -14,7 +14,7 @@ const nav = async () => {
   const host = $("#nav-account"); if (!host) return;
   try {
     const { user } = await api("/api/auth/me");
-    host.innerHTML = '<a class="login-link" href="/dashboard.html">My listings</a><button class="button button-dark" id="logout-button">Log out</button>';
+    host.innerHTML = '<a class="login-link" href="/dashboard.html">My listings</a><a class="login-link" href="/profile.html">Profile</a><button class="button button-dark" id="logout-button">Log out</button>';
     $("#logout-button").addEventListener("click", async () => { await api("/api/auth/logout", { method: "POST" }); location.href = "/"; });
   } catch { /* public visitor */ }
 };
@@ -93,4 +93,22 @@ document.addEventListener("DOMContentLoaded",()=>{
   if(page==="product")productPage();
   if(page==="dashboard")dashboardPage();
   if(page==="listing-form")listingFormPage();
+  if(page==="profile")profilePage();
 });
+
+async function profilePage() {
+  const form = $("#profile-form"); if (!form) return;
+  try {
+    const { user } = await api("/api/auth/me");
+    for (const field of ["name", "email", "phone", "whatsapp", "bio"]) form.elements[field].value = user[field] || "";
+  } catch { location.href = "/login.html"; return; }
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault(); setError("");
+    const button = form.querySelector("button"); button.disabled = true;
+    try {
+      await api("/api/auth/profile", { method: "PATCH", body: JSON.stringify(formData(form)) });
+      toast("Your profile has been updated.");
+    } catch (error) { setError(error.message); }
+    finally { button.disabled = false; }
+  });
+}
