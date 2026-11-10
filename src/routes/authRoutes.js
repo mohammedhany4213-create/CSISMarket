@@ -6,4 +6,5 @@ router.post("/register", asyncHandler(controller.register));
 router.post("/login", asyncHandler(controller.login));
 router.post("/logout", controller.logout);
 router.get("/me", auth, controller.me);
+router.patch("/profile", auth, asyncHandler(controller.updateProfile));
 module.exports = router;
