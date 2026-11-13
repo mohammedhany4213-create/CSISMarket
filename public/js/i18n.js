@@ -5,7 +5,7 @@
       "How it works": "طريقة الاستخدام",
       "BUY & SELL ON CAMPUS": "بيع واشتري في الجامعة",
       "Buy and sell": "بيع واشتري",
-      "on ": "في ",
+      "on campus.": "في الجامعة.",
       "campus.": "الجامعة.",
       "Find useful things from other students, or list something you no longer need.": "دور على اللي محتاجه من طلاب تانيين، أو اعرض حاجة مش محتاجها.",
       "Browse listings": "تصفح المنتجات",
