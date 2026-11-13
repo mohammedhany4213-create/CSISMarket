@@ -355,3 +355,8 @@ h1 em, h2 em { color: var(--green); font-family: var(--serif); font-weight: 500;
   .market-intro-copy h3 { font-size: 26px; }
   .market-intro-link { grid-column: 1; }
 }
+
+/* Product image upload */
+.surface-form input[type="file"]{padding:10px;background:var(--surface-soft);cursor:pointer}
+.image-status{display:block;min-height:18px;margin-top:6px;color:var(--muted);font-size:11px}
+.listing-image-preview{width:100%;max-height:220px;margin-top:12px;object-fit:contain;border:1px solid var(--line);border-radius:9px;background:var(--surface-soft)}

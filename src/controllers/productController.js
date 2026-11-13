@@ -3,6 +3,7 @@ const { z } = require("zod");
 const Product = require("../models/Product");
 const User = require("../models/User");
 const { normalizeWhatsAppNumber } = require("../utils/phone");
+const { parsePositiveInteger } = require("../utils/pagination");
 
 const categories = ["Books", "Electronics", "Accessories", "Study tools", "Other"];
 const productSchema = z.object({
@@ -22,19 +23,24 @@ function validId(id) {
 }
 
 exports.list = async (req, res) => {
-  const rawPage = typeof req.query.page === "string" ? req.query.page : "1";
-  const rawLimit = typeof req.query.limit === "string" ? req.query.limit : "12";
-  const rawQuery = typeof req.query.q === "string" ? req.query.q.trim() : "";
-  const rawCategory = typeof req.query.category === "string" ? req.query.category : "";
+  const page = parsePositiveInteger(req.query.page, 1, 500);
+  const limit = parsePositiveInteger(req.query.limit, 12, 24);
 
-  const requestedPage = Number.parseInt(rawPage, 10);
-  const requestedLimit = Number.parseInt(rawLimit, 10);
-  const page = Number.isFinite(requestedPage) ? Math.min(1000, Math.max(1, requestedPage)) : 1;
-  const limit = Number.isFinite(requestedLimit) ? Math.min(24, Math.max(1, requestedLimit)) : 12;
+  if (page === null || limit === null ||
+      (req.query.q !== undefined && typeof req.query.q !== "string") ||
+      (req.query.category !== undefined && typeof req.query.category !== "string")) {
+    return res.status(400).json({
+      success: false,
+      message: "Invalid search or pagination parameters."
+    });
+  }
 
+  const rawQuery = (req.query.q || "").trim().slice(0, 80);
+  const rawCategory = req.query.category || "";
   const filter = { isAvailable: true };
+
   if (categories.includes(rawCategory)) filter.category = rawCategory;
-  if (rawQuery) filter.$text = { $search: rawQuery.slice(0, 80) };
+  if (rawQuery) filter.$text = { $search: rawQuery };
 
   const [items, total] = await Promise.all([
     Product.find(filter)
