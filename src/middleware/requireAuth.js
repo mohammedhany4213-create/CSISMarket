@@ -21,6 +21,7 @@ async function requireAuth(req, res, next) {
       return res.status(401).json({ success: false, message: "Your session is no longer valid." });
     }
 
+    res.set("Cache-Control", "no-store");
     req.user = user;
     return next();
   } catch {
