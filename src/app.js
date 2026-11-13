@@ -24,7 +24,7 @@ if(!origin||origin!==expected)return res.status(403).json({success:false,message
 next();
 });
 const imageLimiter=rateLimit({windowMs:15*60*1000,limit:10,standardHeaders:"draft-8",legacyHeaders:false,message:{success:false,message:"Too many image uploads. Please try again later."}});
-app.post("/api/products/image",imageLimiter,requireAuth,express.raw({type:["image/jpeg","image/png","image/webp"],limit:"10mb"}),imageController.upload);
+app.post("/api/products/image",imageLimiter,requireAuth,express.raw({type:["image/jpeg","image/png","image/webp","image/gif","image/avif","image/bmp"],limit:"10mb"}),imageController.upload);
 app.use(express.json({limit:"20kb"}));
 app.use(express.urlencoded({extended:false,limit:"20kb"}));
 const apiLimiter=rateLimit({windowMs:15*60*1000,limit:100,standardHeaders:"draft-8",legacyHeaders:false,message:{success:false,message:"Too many requests. Please try again later."}});
