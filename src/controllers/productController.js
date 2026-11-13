@@ -3,6 +3,7 @@ const { z } = require("zod");
 const Product = require("../models/Product");
 const User = require("../models/User");
 const { normalizeWhatsAppNumber } = require("../utils/phone");
+const { parsePositiveInteger } = require("../utils/pagination");
 
 const categories = ["Books", "Electronics", "Accessories", "Study tools", "Other"];
 const productSchema = z.object({
@@ -19,15 +20,6 @@ const productSchema = z.object({
 
 function validId(id) {
   return mongoose.isValidObjectId(id);
-}
-
-function parsePositiveInteger(value, fallback, maximum) {
-  if (value === undefined) return fallback;
-  if (typeof value !== "string" || !/^\d+$/.test(value)) return null;
-
-  const parsed = Number(value);
-  if (!Number.isSafeInteger(parsed) || parsed < 1) return null;
-  return Math.min(parsed, maximum);
 }
 
 exports.list = async (req, res) => {
