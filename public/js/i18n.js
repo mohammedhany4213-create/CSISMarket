@@ -1,6 +1,11 @@
 (() => {
   const dictionaries = {
     ar: {
+      "Whatever you have.":"أيًا كان اللي عندك.",
+      "Whatever you need.":"أيًا كان اللي محتاجه.",
+      "Discover items from fellow students, or give your own products a place in the market. List what you want, find what you're looking for, and connect directly.":"اكتشف منتجات من طلاب تانيين، أو اعرض منتجاتك في السوق. اعرض اللي تحب تبيعه، دور على اللي محتاجه، واتواصل مباشرة.",
+      "MADE FOR STUDENTS":"مصمم للطلاب",
+      "Explore the market":"تصفح السوق",
       "Buy and sell. Keep it simple.": "بيع واشتري بسهولة.",
       "How it works": "طريقة الاستخدام",
       "BUY & SELL ON CAMPUS": "بيع واشتري في الجامعة",
