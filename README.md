@@ -8,7 +8,7 @@ A bilingual (English / Arabic) student-to-student marketplace for the CS communi
 - Argon2 password hashing and HttpOnly JWT session cookies.
 - Public product browsing with text search, category filtering, and pagination.
 - Public listing responses contain seller display names only. Phone and WhatsApp contact details are returned only to signed-in users through a separate endpoint.
-- Authenticated Cloudinary image uploads (JPG, PNG, WebP; 10 MB maximum), with server-side file-signature checks and upload rate limiting.
+- Authenticated Cloudinary image uploads (JPG, PNG, WebP, GIF, AVIF, BMP; 10 MB maximum), with server-side file-signature checks and upload rate limiting.
 - Seller availability controls to mark a listing as sold or available.
 - Egyptian WhatsApp number normalization before generating chat links.
 - Create, edit, and delete your own listings with server-side ownership enforcement.
