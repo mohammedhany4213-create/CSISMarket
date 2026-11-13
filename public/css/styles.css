@@ -326,3 +326,32 @@ h1 em, h2 em { color: var(--green); font-family: var(--serif); font-weight: 500;
   html { scroll-behavior: auto; }
   *, *:before, *:after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+
+/* General marketplace introduction — no product-specific imagery */
+.market-intro-panel { min-height: 245px; margin: 8px 0 30px; padding: 34px 5%; display: grid; grid-template-columns: 150px 1fr auto; align-items: center; gap: 35px; overflow: hidden; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-soft); }
+.market-intro-mark { width: 112px; height: 112px; display: grid; place-items: center; border: 1px solid #cbd8ce; border-radius: 50%; color: var(--green); font-size: 43px; font-weight: 900; letter-spacing: -.12em; transform: rotate(-8deg); }
+.market-intro-mark span { color: var(--accent); }
+.market-intro-copy { max-width: 530px; }
+.market-intro-label { color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .14em; }
+.market-intro-copy h3 { margin: 10px 0 12px; font-size: clamp(25px, 3vw, 38px); line-height: 1.12; letter-spacing: -.055em; }
+.market-intro-copy h3 em { color: var(--green); font-family: var(--serif); font-weight: 500; }
+.market-intro-copy p { max-width: 480px; margin: 0; color: var(--muted); font-size: 12px; line-height: 1.9; }
+.market-intro-link { display: inline-flex; align-items: center; gap: 12px; color: var(--green); font-size: 11px; font-weight: 800; white-space: nowrap; }
+.market-intro-link span { color: var(--accent); font-size: 17px; transition: transform .2s; }
+.market-intro-link:hover span { transform: translate(3px, -3px); }
+.is-arabic .market-intro-panel { direction: rtl; }
+.is-arabic .market-intro-copy { text-align: right; }
+.is-arabic .market-intro-copy h3 { letter-spacing: 0; line-height: 1.45; }
+.is-arabic .market-intro-copy h3 em { font-family: "Noto Sans Arabic", var(--sans); font-weight: 800; }
+@media (max-width: 760px) {
+  .market-intro-panel { min-height: 0; padding: 27px 23px; grid-template-columns: 66px 1fr; gap: 18px; }
+  .market-intro-mark { width: 62px; height: 62px; font-size: 25px; }
+  .market-intro-copy h3 { font-size: 27px; }
+  .market-intro-link { grid-column: 2; }
+}
+@media (max-width: 520px) {
+  .market-intro-panel { padding: 22px 17px; grid-template-columns: 1fr; gap: 14px; }
+  .market-intro-mark { width: 52px; height: 52px; font-size: 22px; }
+  .market-intro-copy h3 { font-size: 26px; }
+  .market-intro-link { grid-column: 1; }
+}
