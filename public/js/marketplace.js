@@ -110,6 +110,18 @@ async function dashboardPage() {
 }
 async function listingFormPage() {
   const form=$("#listing-form");if(!form)return;
+  const imageInput=$("#listing-image");
+  if(imageInput){
+    imageInput.addEventListener("change",()=>{
+      const file=imageInput.files?.[0],preview=$("#image-preview"),status=$("#image-status");
+      if(!file){if(status)status.textContent="";return;}
+      if(file.size>5*1024*1024){imageInput.value="";if(status)status.textContent="Image must be 5 MB or smaller.";return;}
+      const allowed=["image/jpeg","image/png","image/webp"];
+      if(!allowed.includes(file.type)){imageInput.value="";if(status)status.textContent="Choose a JPG, PNG, or WebP image.";return;}
+      if(status)status.textContent=file.name;
+      if(preview){if(preview.dataset.objectUrl)URL.revokeObjectURL(preview.dataset.objectUrl);const objectUrl=URL.createObjectURL(file);preview.dataset.objectUrl=objectUrl;preview.src=objectUrl;preview.hidden=false;}
+    });
+  }
   let id=new URLSearchParams(location.search).get("id");
   if(id){
     try{const {item}=await api("/api/products/"+encodeURIComponent(id));form.elements.title.value=item.title;form.elements.description.value=item.description;form.elements.price.value=item.price;form.elements.category.value=item.category;form.elements.condition.value=item.condition;form.dataset.existingImageUrl=item.imageUrl||"";if(item.imageUrl){const preview=$("#image-preview");preview.src=item.imageUrl;preview.hidden=false;}$("#listing-title").textContent="Edit listing";$("#listing-eyebrow").textContent="MAKE IT JUST RIGHT";form.querySelector("button").innerHTML='Save changes <span>↗</span>';}
