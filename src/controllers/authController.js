@@ -25,6 +25,7 @@ function getSessionMaxAge(value) {
 }
 
 function setSession(res, user) {
+  res.set("Cache-Control", "no-store");
   const token = jwt.sign(
     { sub: user.id, ver: user.tokenVersion || 0 },
     env.JWT_SECRET,
@@ -40,6 +41,7 @@ function setSession(res, user) {
 }
 
 exports.register = async (req, res) => {
+  res.set("Cache-Control", "no-store");
   const parsed = registerSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({
@@ -76,6 +78,7 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
+  res.set("Cache-Control", "no-store");
   const parsed = loginSchema.safeParse(req.body);
   if (!parsed.success) {
     return res.status(400).json({ success: false, message: "Enter a valid email and password." });
@@ -94,6 +97,7 @@ exports.login = async (req, res) => {
 };
 
 exports.logout = async (req, res) => {
+  res.set("Cache-Control", "no-store");
   await User.findByIdAndUpdate(req.user.id, { $inc: { tokenVersion: 1 } });
   res.clearCookie("cs_marche_token", {
     httpOnly: true,
@@ -137,5 +141,6 @@ exports.updateProfile = async (req, res) => {
     runValidators: true
   }).select("_id name email phone whatsapp bio");
 
+  res.set("Cache-Control", "no-store");
   res.json({ success: true, user });
 };
