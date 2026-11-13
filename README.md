@@ -8,7 +8,7 @@ A bilingual (English / Arabic) student-to-student marketplace for the CS communi
 - Argon2 password hashing and HttpOnly JWT session cookies.
 - Public product browsing with text search, category filtering, and pagination.
 - Public listing responses contain seller display names only. Phone and WhatsApp contact details are returned only to signed-in users through a separate endpoint.
-- Authenticated Cloudinary image uploads (JPG, PNG, WebP; 5 MB maximum), with server-side file-signature checks and upload rate limiting.
+- Authenticated Cloudinary image uploads (JPG, PNG, WebP; 10 MB maximum), with server-side file-signature checks and upload rate limiting.
 - Seller availability controls to mark a listing as sold or available.
 - Egyptian WhatsApp number normalization before generating chat links.
 - Create, edit, and delete your own listings with server-side ownership enforcement.
@@ -106,7 +106,7 @@ The script asks for a new password without displaying it, stores only its Argon2
 
 ## Product images
 
-Product photos are uploaded to Cloudinary; only the resulting HTTPS URL is stored with the listing. Configure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in hosting environment variables. Uploads require login, accept JPG/PNG/WebP up to 5 MB, validate file signatures server-side, and are rate-limited. Never expose the Cloudinary API secret in frontend code.
+Product photos are uploaded to Cloudinary; only the resulting HTTPS URL is stored with the listing. Configure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET in hosting environment variables. Uploads require login, accept JPG/PNG/WebP up to 10 MB, validate file signatures server-side, and are rate-limited. Never expose the Cloudinary API secret in frontend code.
 
 ## Security notes
 
