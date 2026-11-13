@@ -10,7 +10,7 @@ res.set("Cache-Control","no-store");
 if(!env.CLOUDINARY_CLOUD_NAME||!env.CLOUDINARY_API_KEY||!env.CLOUDINARY_API_SECRET)return res.status(503).json({success:false,message:"Image uploads are not configured yet."});
 const file=req.body;
 if(!Buffer.isBuffer(file)||!file.length)return res.status(400).json({success:false,message:"Choose an image to upload."});
-if(file.length>5*1024*1024)return res.status(413).json({success:false,message:"Image must be 5 MB or smaller."});
+if(file.length>10*1024*1024)return res.status(413).json({success:false,message:"Image must be 10 MB or smaller."});
 const type=types.find(([, ,check])=>check(file));
 if(!type)return res.status(415).json({success:false,message:"Only valid JPG, PNG, and WebP images are supported."});
 const timestamp=Math.floor(Date.now()/1000),publicId="listing-"+crypto.randomUUID();
