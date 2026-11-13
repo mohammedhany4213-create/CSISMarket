@@ -109,25 +109,133 @@ async function dashboardPage() {
   }
 }
 async function listingFormPage() {
-  const form=$("#listing-form");if(!form)return;
-  const imageInput=$("#listing-image");
-  if(imageInput){
-    imageInput.addEventListener("change",()=>{
-      const file=imageInput.files?.[0],preview=$("#image-preview"),status=$("#image-status");
-      if(!file){if(status)status.textContent="";return;}
-      if(file.size>10*1024*1024){imageInput.value="";if(status)status.textContent="Image must be 10 MB or smaller.";return;}
-      const allowed=["image/jpeg","image/png","image/webp","image/gif","image/avif","image/bmp"];
-      if(!allowed.includes(file.type)){imageInput.value="";if(status)status.textContent="Choose a JPG, PNG, WebP, GIF, AVIF, or BMP image.";return;}
-      if(status)status.textContent=file.name;
-      if(preview){if(preview.dataset.objectUrl)URL.revokeObjectURL(preview.dataset.objectUrl);const objectUrl=URL.createObjectURL(file);preview.dataset.objectUrl=objectUrl;preview.src=objectUrl;preview.hidden=false;}
-    });
+  const form = $("#listing-form");
+  if (!form) return;
+
+  const imageInput = $("#listing-image");
+  const preview = $("#image-preview");
+  const status = $("#image-status");
+  const submitButton = form.querySelector('button[type="submit"]');
+
+  const showImage = (file) => {
+    if (!file) {
+      if (preview) {
+        preview.removeAttribute("src");
+        preview.hidden = true;
+      }
+      if (status) status.textContent = "";
+      return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+      imageInput.value = "";
+      if (status) status.textContent = "Image must be 10 MB or smaller.";
+      if (preview) preview.hidden = true;
+      return;
+    }
+
+    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif", "image/avif", "image/bmp"];
+    const extension = file.name.split(".").pop().toLowerCase();
+    const allowedExtensions = ["jpg", "jpeg", "png", "webp", "gif", "avif", "bmp"];
+    if ((file.type && !allowedTypes.includes(file.type)) || !allowedExtensions.includes(extension)) {
+      imageInput.value = "";
+      if (status) status.textContent = "Choose a JPG, PNG, WebP, GIF, AVIF, or BMP image.";
+      if (preview) preview.hidden = true;
+      return;
+    }
+
+    if (status) status.textContent = file.name;
+    if (preview) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        preview.src = reader.result;
+        preview.hidden = false;
+      };
+      reader.onerror = () => {
+        preview.hidden = true;
+        if (status) status.textContent = "Could not preview this image. Try another file.";
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  if (imageInput) {
+    imageInput.addEventListener("change", () => showImage(imageInput.files?.[0]));
   }
-  let id=new URLSearchParams(location.search).get("id");
-  if(id){
-    try{const {item}=await api("/api/products/"+encodeURIComponent(id));form.elements.title.value=item.title;form.elements.description.value=item.description;form.elements.price.value=item.price;form.elements.category.value=item.category;form.elements.condition.value=item.condition;form.dataset.existingImageUrl=item.imageUrl||"";if(item.imageUrl){const preview=$("#image-preview");preview.src=item.imageUrl;preview.hidden=false;}$("#listing-title").textContent="Edit listing";$("#listing-eyebrow").textContent="MAKE IT JUST RIGHT";form.querySelector("button").innerHTML='Save changes <span>↗</span>';}
-    catch(error){setError(error.message);return;}
+
+  const id = new URLSearchParams(location.search).get("id");
+  if (id) {
+    try {
+      const { item } = await api("/api/products/" + encodeURIComponent(id));
+      form.elements.title.value = item.title;
+      form.elements.description.value = item.description;
+      form.elements.price.value = item.price;
+      form.elements.category.value = item.category;
+      form.elements.condition.value = item.condition;
+      form.dataset.existingImageUrl = item.imageUrl || "";
+      if (item.imageUrl && preview) {
+        preview.src = item.imageUrl;
+        preview.hidden = false;
+      }
+      $("#listing-title").textContent = "Edit listing";
+      $("#listing-eyebrow").textContent = "MAKE IT JUST RIGHT";
+      submitButton.textContent = "Save changes";
+    } catch (error) {
+      setError(error.message);
+      return;
+    }
   }
-  form.addEventListener("submit",async(event)=>{event.preventDefault();setError("");const button=form.querySelector("button");button.disabled=true;try{const data=formData(form);data.price=Number(data.price);delete data.image;const imageFile=$("#listing-image")?.files?.[0];if(imageFile){if(imageFile.size>10*1024*1024)throw new Error("Image must be 10 MB or smaller.");const uploaded=await fetch("/api/products/image",{method:"POST",credentials:"same-origin",headers:{"Content-Type":imageFile.type},body:imageFile});const imageResult=await uploaded.json().catch(()=>({}));if(!uploaded.ok)throw new Error(imageResult.message||"Image upload failed.");data.imageUrl=imageResult.imageUrl;}else{data.imageUrl=form.dataset.existingImageUrl||"";}await api(id?"/api/products/"+encodeURIComponent(id):"/api/products",{method:id?"PATCH":"POST",body:JSON.stringify(data)});location.href="/dashboard.html";}catch(error){setError(error.message);button.disabled=false;}});
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    setError("");
+
+    if (!form.reportValidity()) return;
+
+    submitButton.disabled = true;
+    const originalText = submitButton.textContent;
+    submitButton.textContent = "Saving...";
+
+    try {
+      const data = formData(form);
+      data.price = Number(data.price);
+      delete data.image;
+
+      const imageFile = imageInput?.files?.[0];
+      if (imageFile) {
+        if (imageFile.size > 10 * 1024 * 1024) {
+          throw new Error("Image must be 10 MB or smaller.");
+        }
+
+        const uploadResponse = await fetch("/api/products/image", {
+          method: "POST",
+          credentials: "same-origin",
+          headers: { "Content-Type": imageFile.type || "application/octet-stream" },
+          body: imageFile
+        });
+        const uploadResult = await uploadResponse.json().catch(() => ({}));
+        if (!uploadResponse.ok) {
+          throw new Error(uploadResult.message || "Image upload failed. Please try again.");
+        }
+        if (!uploadResult.imageUrl) {
+          throw new Error("Image service did not return an image URL.");
+        }
+        data.imageUrl = uploadResult.imageUrl;
+      } else {
+        data.imageUrl = form.dataset.existingImageUrl || "";
+      }
+
+      await api(id ? "/api/products/" + encodeURIComponent(id) : "/api/products", {
+        method: id ? "PATCH" : "POST",
+        body: JSON.stringify(data)
+      });
+      location.href = "/dashboard.html";
+    } catch (error) {
+      setError(error.message || "Could not save this listing. Please try again.");
+      submitButton.disabled = false;
+      submitButton.textContent = originalText;
+    }
+  });
 }
 document.addEventListener("DOMContentLoaded",()=>{
   const year=$("#year");if(year)year.textContent=new Date().getFullYear();
