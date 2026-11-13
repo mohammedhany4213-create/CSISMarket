@@ -115,7 +115,7 @@ async function listingFormPage() {
     imageInput.addEventListener("change",()=>{
       const file=imageInput.files?.[0],preview=$("#image-preview"),status=$("#image-status");
       if(!file){if(status)status.textContent="";return;}
-      if(file.size>5*1024*1024){imageInput.value="";if(status)status.textContent="Image must be 5 MB or smaller.";return;}
+      if(file.size>10*1024*1024){imageInput.value="";if(status)status.textContent="Image must be 10 MB or smaller.";return;}
       const allowed=["image/jpeg","image/png","image/webp"];
       if(!allowed.includes(file.type)){imageInput.value="";if(status)status.textContent="Choose a JPG, PNG, or WebP image.";return;}
       if(status)status.textContent=file.name;
@@ -127,7 +127,7 @@ async function listingFormPage() {
     try{const {item}=await api("/api/products/"+encodeURIComponent(id));form.elements.title.value=item.title;form.elements.description.value=item.description;form.elements.price.value=item.price;form.elements.category.value=item.category;form.elements.condition.value=item.condition;form.dataset.existingImageUrl=item.imageUrl||"";if(item.imageUrl){const preview=$("#image-preview");preview.src=item.imageUrl;preview.hidden=false;}$("#listing-title").textContent="Edit listing";$("#listing-eyebrow").textContent="MAKE IT JUST RIGHT";form.querySelector("button").innerHTML='Save changes <span>↗</span>';}
     catch(error){setError(error.message);return;}
   }
-  form.addEventListener("submit",async(event)=>{event.preventDefault();setError("");const button=form.querySelector("button");button.disabled=true;try{const data=formData(form);data.price=Number(data.price);delete data.image;const imageFile=$("#listing-image")?.files?.[0];if(imageFile){if(imageFile.size>5*1024*1024)throw new Error("Image must be 5 MB or smaller.");const uploaded=await fetch("/api/products/image",{method:"POST",credentials:"same-origin",headers:{"Content-Type":imageFile.type},body:imageFile});const imageResult=await uploaded.json().catch(()=>({}));if(!uploaded.ok)throw new Error(imageResult.message||"Image upload failed.");data.imageUrl=imageResult.imageUrl;}else{data.imageUrl=form.dataset.existingImageUrl||"";}await api(id?"/api/products/"+encodeURIComponent(id):"/api/products",{method:id?"PATCH":"POST",body:JSON.stringify(data)});location.href="/dashboard.html";}catch(error){setError(error.message);button.disabled=false;}});
+  form.addEventListener("submit",async(event)=>{event.preventDefault();setError("");const button=form.querySelector("button");button.disabled=true;try{const data=formData(form);data.price=Number(data.price);delete data.image;const imageFile=$("#listing-image")?.files?.[0];if(imageFile){if(imageFile.size>10*1024*1024)throw new Error("Image must be 10 MB or smaller.");const uploaded=await fetch("/api/products/image",{method:"POST",credentials:"same-origin",headers:{"Content-Type":imageFile.type},body:imageFile});const imageResult=await uploaded.json().catch(()=>({}));if(!uploaded.ok)throw new Error(imageResult.message||"Image upload failed.");data.imageUrl=imageResult.imageUrl;}else{data.imageUrl=form.dataset.existingImageUrl||"";}await api(id?"/api/products/"+encodeURIComponent(id):"/api/products",{method:id?"PATCH":"POST",body:JSON.stringify(data)});location.href="/dashboard.html";}catch(error){setError(error.message);button.disabled=false;}});
 }
 document.addEventListener("DOMContentLoaded",()=>{
   const year=$("#year");if(year)year.textContent=new Date().getFullYear();
