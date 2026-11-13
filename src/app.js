@@ -15,6 +15,8 @@ defaultSrc:["'self'"],scriptSrc:["'self'"],styleSrc:["'self'","'unsafe-inline'",
 fontSrc:["'self'","https://fonts.gstatic.com"],imgSrc:["'self'","data:","https://res.cloudinary.com","https://images.unsplash.com"],
 connectSrc:["'self'"],objectSrc:["'none'"],baseUri:["'self'"],formAction:["'self'"],frameAncestors:["'none'"]
 }}}));
+app.use(cookieParser());
+
 app.use("/api",(req,res,next)=>{
 if(["GET","HEAD","OPTIONS"].includes(req.method))return next();
 const origin=req.get("origin"),expected=env.APP_ORIGIN||(req.protocol+"://"+req.get("host"));
@@ -25,7 +27,6 @@ const imageLimiter=rateLimit({windowMs:15*60*1000,limit:10,standardHeaders:"draf
 app.post("/api/products/image",imageLimiter,requireAuth,express.raw({type:["image/jpeg","image/png","image/webp"],limit:"5mb"}),imageController.upload);
 app.use(express.json({limit:"20kb"}));
 app.use(express.urlencoded({extended:false,limit:"20kb"}));
-app.use(cookieParser());
 const apiLimiter=rateLimit({windowMs:15*60*1000,limit:100,standardHeaders:"draft-8",legacyHeaders:false,message:{success:false,message:"Too many requests. Please try again later."}});
 const authLimiter=rateLimit({windowMs:15*60*1000,limit:20,standardHeaders:"draft-8",legacyHeaders:false,message:{success:false,message:"Too many login or registration attempts. Try again later."}});
 app.use("/api",apiLimiter);app.use("/api/auth/login",authLimiter);app.use("/api/auth/register",authLimiter);
