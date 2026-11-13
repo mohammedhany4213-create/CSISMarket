@@ -9,7 +9,7 @@ const envSchema = z.object({
   MONGODB_URI: z.string().min(1, "MONGODB_URI is required"),
   JWT_SECRET: z.string().min(32, "JWT_SECRET must contain at least 32 characters"),
   JWT_EXPIRES_IN: z.string().default("1d"),
-  APP_ORIGIN: z.string().url().optional(),
+  APP_ORIGIN: z.string().url().transform((value) => new URL(value).origin).optional(),
   TRUST_PROXY: z.coerce.number().int().min(0).default(0)
 });
 
