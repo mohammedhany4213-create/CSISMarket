@@ -9,7 +9,6 @@ const envSchema = z.object({
   MONGODB_URI: z.string().min(1, "MONGODB_URI is required"),
   JWT_SECRET: z.string().min(32, "JWT_SECRET must contain at least 32 characters"),
   JWT_EXPIRES_IN: z.string().default("1d"),
-  ALLOWED_EMAIL_DOMAINS: z.string().default(""),
   APP_ORIGIN: z.string().url().optional(),
   TRUST_PROXY: z.coerce.number().int().min(0).default(0)
 });
@@ -22,9 +21,15 @@ if (!parsed.success) {
   process.exit(1);
 }
 
-if (parsed.data.NODE_ENV === "production" && (!parsed.data.APP_ORIGIN || !parsed.data.ALLOWED_EMAIL_DOMAINS.trim())) {
-  console.error("Production requires APP_ORIGIN and ALLOWED_EMAIL_DOMAINS.");
-  process.exit(1);
+if (parsed.data.NODE_ENV === "production") {
+  if (!parsed.data.APP_ORIGIN || new URL(parsed.data.APP_ORIGIN).protocol !== "https:") {
+    console.error("Production requires APP_ORIGIN to be a valid HTTPS URL.");
+    process.exit(1);
+  }
+  if (parsed.data.JWT_SECRET.length < 48 || /replace-with|change-me|your-secret/i.test(parsed.data.JWT_SECRET)) {
+    console.error("Production requires a unique JWT_SECRET of at least 48 characters.");
+    process.exit(1);
+  }
 }
 
 module.exports = parsed.data;
