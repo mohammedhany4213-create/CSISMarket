@@ -116,8 +116,8 @@ async function listingFormPage() {
       const file=imageInput.files?.[0],preview=$("#image-preview"),status=$("#image-status");
       if(!file){if(status)status.textContent="";return;}
       if(file.size>10*1024*1024){imageInput.value="";if(status)status.textContent="Image must be 10 MB or smaller.";return;}
-      const allowed=["image/jpeg","image/png","image/webp"];
-      if(!allowed.includes(file.type)){imageInput.value="";if(status)status.textContent="Choose a JPG, PNG, or WebP image.";return;}
+      const allowed=["image/jpeg","image/png","image/webp","image/gif","image/avif","image/bmp"];
+      if(!allowed.includes(file.type)){imageInput.value="";if(status)status.textContent="Choose a JPG, PNG, WebP, GIF, AVIF, or BMP image.";return;}
       if(status)status.textContent=file.name;
       if(preview){if(preview.dataset.objectUrl)URL.revokeObjectURL(preview.dataset.objectUrl);const objectUrl=URL.createObjectURL(file);preview.dataset.objectUrl=objectUrl;preview.src=objectUrl;preview.hidden=false;}
     });
