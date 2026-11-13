@@ -3,7 +3,10 @@ const env=require("../config/env");
 const types=[
 ["image/jpeg","jpg",b=>b.length>=3&&b[0]===255&&b[1]===216&&b[2]===255],
 ["image/png","png",b=>b.length>=8&&b.subarray(0,8).equals(Buffer.from([137,80,78,71,13,10,26,10]))],
-["image/webp","webp",b=>b.length>=12&&b.toString("ascii",0,4)==="RIFF"&&b.toString("ascii",8,12)==="WEBP"]
+["image/webp","webp",b=>b.length>=12&&b.toString("ascii",0,4)==="RIFF"&&b.toString("ascii",8,12)==="WEBP"],
+["image/gif","gif",b=>b.length>=6&&["GIF87a","GIF89a"].includes(b.toString("ascii",0,6))],
+["image/avif","avif",b=>b.length>=12&&b.toString("ascii",4,8)==="ftyp"&&["avif","avis"].includes(b.toString("ascii",8,12))],
+["image/bmp","bmp",b=>b.length>=14&&b.toString("ascii",0,2)==="BM"]
 ];
 exports.upload=async(req,res)=>{
 res.set("Cache-Control","no-store");
@@ -12,7 +15,7 @@ const file=req.body;
 if(!Buffer.isBuffer(file)||!file.length)return res.status(400).json({success:false,message:"Choose an image to upload."});
 if(file.length>10*1024*1024)return res.status(413).json({success:false,message:"Image must be 10 MB or smaller."});
 const type=types.find(([, ,check])=>check(file));
-if(!type)return res.status(415).json({success:false,message:"Only valid JPG, PNG, and WebP images are supported."});
+if(!type)return res.status(415).json({success:false,message:"Only valid JPG, PNG, WebP, GIF, AVIF, and BMP images are supported."});
 const timestamp=Math.floor(Date.now()/1000),publicId="listing-"+crypto.randomUUID();
 const signature=crypto.createHash("sha1").update("public_id="+publicId+"&timestamp="+timestamp+env.CLOUDINARY_API_SECRET).digest("hex");
 const form=new FormData();
